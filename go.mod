@@ -2,6 +2,8 @@ module simply-dns-webhook
 
 go 1.18
 
+replace go.opentelemetry.io/otel/semconv => ../opentelemetry-go/semconv/v1.11.0
+
 require (
 	github.com/cert-manager/cert-manager v1.9.1
 	k8s.io/client-go v0.24.3
@@ -65,6 +67,7 @@ require (
 	go.opentelemetry.io/otel/sdk v1.3.0 // indirect
 	go.opentelemetry.io/otel/sdk/export/metric v0.20.0 // indirect
 	go.opentelemetry.io/otel/sdk/metric v0.20.0 // indirect
+	go.opentelemetry.io/otel/semconv v0.0.0-00010101000000-000000000000 // indirect
 	go.opentelemetry.io/otel/trace v1.9.0 // indirect
 	go.opentelemetry.io/proto/otlp v0.11.0 // indirect
 	go.uber.org/atomic v1.7.0 // indirect
