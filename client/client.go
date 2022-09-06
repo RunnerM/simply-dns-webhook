@@ -9,12 +9,13 @@ import (
 	"strconv"
 )
 
+const (
+	apiUrl = "https://api.simply.com/2"
+)
+
 // SimplyClient base type
 type SimplyClient struct {
-	Baseurl     string
-	ApiKey      string
-	AccountName string
-	Domain      string
+	Domain string
 }
 
 // RecordResponse api type
@@ -49,8 +50,13 @@ type CreateRecordResponse struct {
 	Message string `json:"message"`
 }
 
+type Credentials struct {
+	AccountName string `json:"status"`
+	ApiKey      string `json:"message"`
+}
+
 // AddTxtRecord Add txt record to simply
-func (c *SimplyClient) AddTxtRecord(SubDomain string, Value string) int {
+func (c *SimplyClient) AddTxtRecord(SubDomain string, Value string, credentials Credentials) int {
 	TXTRecordBody := CreateRecordBody{
 		Type:     "TXT",
 		Name:     SubDomain,
@@ -60,9 +66,9 @@ func (c *SimplyClient) AddTxtRecord(SubDomain string, Value string) int {
 	}
 	postBody, _ := json.Marshal(TXTRecordBody)
 
-	req, error := http.NewRequest("POST", c.Baseurl+"/my/products/"+c.Domain+"/dns/records", bytes.NewBuffer(postBody))
+	req, error := http.NewRequest("POST", apiUrl+"/my/products/"+c.Domain+"/dns/records", bytes.NewBuffer(postBody))
 	req.Header.Set("Content-Type", "application/json; charset=UTF-8")
-	req.SetBasicAuth(c.AccountName, c.ApiKey)
+	req.SetBasicAuth(credentials.AccountName, credentials.ApiKey)
 	client := &http.Client{}
 	response, error := client.Do(req)
 
@@ -84,9 +90,9 @@ func (c *SimplyClient) AddTxtRecord(SubDomain string, Value string) int {
 }
 
 // RemoveTxtRecord Remove TXT record from symply
-func (c *SimplyClient) RemoveTxtRecord(RecordId int) bool {
-	req, error := http.NewRequest("DELETE", c.Baseurl+"/my/products/"+c.Domain+"/dns/records/"+strconv.Itoa(RecordId), nil)
-	req.SetBasicAuth(c.AccountName, c.ApiKey)
+func (c *SimplyClient) RemoveTxtRecord(RecordId int, credentials Credentials) bool {
+	req, error := http.NewRequest("DELETE", apiUrl+"/my/products/"+c.Domain+"/dns/records/"+strconv.Itoa(RecordId), nil)
+	req.SetBasicAuth(credentials.AccountName, credentials.ApiKey)
 	client := &http.Client{}
 	response, error := client.Do(req)
 
@@ -99,9 +105,9 @@ func (c *SimplyClient) RemoveTxtRecord(RecordId int) bool {
 }
 
 // GetTxtRecord Fetch TXT record by data returns id
-func (c *SimplyClient) GetTxtRecord(TxtData string) int {
-	req, error := http.NewRequest("GET", c.Baseurl+"/my/products/"+c.Domain+"/dns/records", nil)
-	req.SetBasicAuth(c.AccountName, c.ApiKey)
+func (c *SimplyClient) GetTxtRecord(TxtData string, credentials Credentials) int {
+	req, error := http.NewRequest("GET", apiUrl+"/my/products/"+c.Domain+"/dns/records", nil)
+	req.SetBasicAuth(credentials.AccountName, credentials.ApiKey)
 	client := &http.Client{}
 	response, error := client.Do(req)
 

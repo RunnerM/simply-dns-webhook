@@ -14,10 +14,6 @@ import (
 	"simply-dns-webhook/client"
 )
 
-const (
-	apiUrl = "https://api.simply.com/2"
-)
-
 var GroupName = os.Getenv("GROUP_NAME")
 
 func main() {
@@ -41,7 +37,7 @@ type customDNSProviderConfig struct {
 	// These fields will be set by users in the
 	// `issuer.spec.acme.dns01.providers.webhook.config` field.
 
-	AccountName string `json:"accountName"`
+	AccountName string `json:"account-name"`
 	ApiKey      string `json:"api-key"`
 	SecretRef   string `json:"secretName"`
 }
@@ -55,23 +51,21 @@ func (e *SimplyDnsSolver) Name() string {
 	return "simply-dns-solver"
 }
 func (e *SimplyDnsSolver) Present(ch *v1alpha1.ChallengeRequest) error {
-	cfg, err := loadConfig(ch.Config)
-	if err != nil {
-		return err
+	cred, err2 := loadCredFromSecret(ch, e)
+	if err2 != nil {
+		return err2
 	}
-	secretName := cfg.SecretRef
-	sec, err := e.kubeClient.CoreV1().Secrets(ch.ResourceNamespace).Get(context.TODO(), secretName, metav1.GetOptions{})
-	//todo:error handling
-	apiKey, err := stringFromSecretData(&sec.Data, "api-key")
-	//todo:error handling
-	apiKey = apiKey + "" //bullshit code coming here
-	e.client.AddTxtRecord(ch.DNSName, ch.Key)
+	e.client.AddTxtRecord(ch.DNSName, ch.Key, cred)
 	return nil
 }
 
 func (e *SimplyDnsSolver) CleanUp(ch *v1alpha1.ChallengeRequest) error {
-	Id := e.client.GetTxtRecord(ch.DNSName)
-	e.client.RemoveTxtRecord(Id)
+	cred, err2 := loadCredFromSecret(ch, e)
+	if err2 != nil {
+		return err2
+	}
+	Id := e.client.GetTxtRecord(ch.DNSName, cred)
+	e.client.RemoveTxtRecord(Id, cred)
 	return nil
 }
 
@@ -104,4 +98,27 @@ func stringFromSecretData(secretData *map[string][]byte, key string) (string, er
 		return "", fmt.Errorf("key %q not found in secret data", key)
 	}
 	return string(data), nil
+}
+
+func loadCredFromSecret(ch *v1alpha1.ChallengeRequest, e *SimplyDnsSolver) (client.Credentials, error) {
+	cfg, err := loadConfig(ch.Config)
+	if err != nil {
+		return client.Credentials{}, err
+	}
+	secretName := cfg.SecretRef
+	sec, err := e.kubeClient.CoreV1().Secrets(ch.ResourceNamespace).Get(context.TODO(), secretName, metav1.GetOptions{})
+	if err != nil {
+		return client.Credentials{}, err
+	}
+
+	accountName, err := stringFromSecretData(&sec.Data, "account-name")
+	apiKey, err := stringFromSecretData(&sec.Data, "api-key")
+	if err != nil {
+		return client.Credentials{}, err
+	}
+
+	cred := client.Credentials{
+		AccountName: accountName, ApiKey: apiKey,
+	}
+	return cred, nil
 }
