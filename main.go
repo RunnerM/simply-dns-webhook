@@ -31,15 +31,12 @@ func main() {
 	)
 }
 
-type customDNSProviderConfig struct {
+type SimplyDNSProviderConfig struct {
 	// Change the two fields below according to the format of the configuration
 	// to be decoded.
 	// These fields will be set by users in the
 	// `issuer.spec.acme.dns01.providers.webhook.config` field.
-
-	AccountName string `json:"account-name"`
-	ApiKey      string `json:"api-key"`
-	SecretRef   string `json:"secretName"`
+	SecretRef string `json:"secretName"`
 }
 
 type SimplyDnsSolver struct {
@@ -80,8 +77,8 @@ func (e *SimplyDnsSolver) Initialize(kubeClientConfig *rest.Config, stopCh <-cha
 	return nil
 }
 
-func loadConfig(cfgJSON *extapi.JSON) (customDNSProviderConfig, error) {
-	cfg := customDNSProviderConfig{}
+func loadConfig(cfgJSON *extapi.JSON) (SimplyDNSProviderConfig, error) {
+	cfg := SimplyDNSProviderConfig{}
 
 	if cfgJSON == nil {
 		return cfg, nil
