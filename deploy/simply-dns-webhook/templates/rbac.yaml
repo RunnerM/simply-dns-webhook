@@ -69,7 +69,6 @@ rules:
       - '*'
     verbs:
       - 'create'
-      - 'list'
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
@@ -84,6 +83,81 @@ roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
   name: {{ include "simply-dns-webhook.fullname" . }}:domain-solver
+subjects:
+  - apiGroup: ""
+    kind: ServiceAccount
+    name: {{ .Values.certManager.serviceAccountName }}
+    namespace: {{ .Values.certManager.namespace }}
+---
+# Grant access to list flowcontrol
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ include "simply-dns-webhook.fullname" . }}:flow-control
+  labels:
+    app: {{ include "simply-dns-webhook.name" . }}
+    chart: {{ include "simply-dns-webhook.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+rules:
+  - apiGroups:
+      - 'flowcontrol.apiserver.k8s.io'
+    resources:
+      - '*'
+    verbs:
+      - 'list'
+      - 'watch'
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: {{ include "simply-dns-webhook.fullname" . }}:flow-control
+  labels:
+    app: {{ include "simply-dns-webhook.name" . }}
+    chart: {{ include "simply-dns-webhook.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: {{ include "simply-dns-webhook.fullname" . }}:flow-control
+subjects:
+  - apiGroup: ""
+    kind: ServiceAccount
+    name: {{ .Values.certManager.serviceAccountName }}
+    namespace: {{ .Values.certManager.namespace }}
+---
+# Grant access to get secrets
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ include "simply-dns-webhook.fullname" . }}:secret-access
+  labels:
+    app: {{ include "simply-dns-webhook.name" . }}
+    chart: {{ include "simply-dns-webhook.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+rules:
+  - apiGroups:
+      - '*'
+    resources:
+      - 'secrets'
+    verbs:
+      - 'get'
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: {{ include "simply-dns-webhook.fullname" . }}:secret-access
+  labels:
+    app: {{ include "simply-dns-webhook.name" . }}
+    chart: {{ include "simply-dns-webhook.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: {{ include "simply-dns-webhook.fullname" . }}:secret-access
 subjects:
   - apiGroup: ""
     kind: ServiceAccount

@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"github.com/bobesa/go-domain-util/domainutil"
 	"io/ioutil"
 	"net/http"
 	"strconv"
@@ -15,7 +16,6 @@ const (
 
 // SimplyClient base type
 type SimplyClient struct {
-	Domain string
 }
 
 // RecordResponse api type
@@ -56,48 +56,53 @@ type Credentials struct {
 }
 
 // AddTxtRecord Add txt record to simply
-func (c *SimplyClient) AddTxtRecord(SubDomain string, Value string, credentials Credentials) int {
+func (c *SimplyClient) AddTxtRecord(Domain string, Value string, credentials Credentials) (int, error) {
 	TXTRecordBody := CreateRecordBody{
 		Type:     "TXT",
-		Name:     SubDomain,
+		Name:     domainutil.Subdomain(Domain),
 		Data:     Value,
 		Priority: 1,
 		Ttl:      3600,
 	}
 	postBody, _ := json.Marshal(TXTRecordBody)
+	fmt.Println("adding dns record: ")
+	fmt.Println(postBody)
 
-	req, error := http.NewRequest("POST", apiUrl+"/my/products/"+c.Domain+"/dns/records", bytes.NewBuffer(postBody))
+	req, err := http.NewRequest("POST", apiUrl+"/my/products/"+domainutil.Domain(Domain)+"/dns/records", bytes.NewBuffer(postBody))
 	req.Header.Set("Content-Type", "application/json; charset=UTF-8")
 	req.SetBasicAuth(credentials.AccountName, credentials.ApiKey)
+	fmt.Println("name: ", credentials.AccountName, "  key: ", credentials.ApiKey)
 	client := &http.Client{}
-	response, error := client.Do(req)
+	response, err := client.Do(req)
 
-	if error != nil || response.StatusCode != 200 {
-		fmt.Println("Error on request: ", error, " response: ", response.StatusCode)
+	if err != nil || response.StatusCode != 200 {
+		fmt.Println("Error on request: ", err, " response: ", response.StatusCode)
+		return 0, err
 	}
-	responseData, error := ioutil.ReadAll(response.Body)
+	responseData, err := ioutil.ReadAll(response.Body)
 
-	if error != nil {
-		fmt.Println("Error on read: ", error)
+	if err != nil {
+		fmt.Println("Error on read: ", err)
 	}
 	var data CreateRecordResponse
 
-	error = json.Unmarshal(responseData, &data)
-	if error != nil {
-		panic(error)
+	err = json.Unmarshal(responseData, &data)
+	if err != nil {
+		panic(err)
 	}
-	return data.Record.Id
+	return data.Record.Id, nil
 }
 
 // RemoveTxtRecord Remove TXT record from symply
-func (c *SimplyClient) RemoveTxtRecord(RecordId int, credentials Credentials) bool {
-	req, error := http.NewRequest("DELETE", apiUrl+"/my/products/"+c.Domain+"/dns/records/"+strconv.Itoa(RecordId), nil)
+func (c *SimplyClient) RemoveTxtRecord(RecordId int, DnsName string, credentials Credentials) bool {
+	req, err := http.NewRequest("DELETE", apiUrl+"/my/products/"+domainutil.Domain(DnsName)+"/dns/records/"+strconv.Itoa(RecordId), nil)
 	req.SetBasicAuth(credentials.AccountName, credentials.ApiKey)
+	fmt.Println(credentials.AccountName, "  ", credentials.ApiKey)
 	client := &http.Client{}
-	response, error := client.Do(req)
+	response, err := client.Do(req)
 
-	if error != nil || response.StatusCode != 200 {
-		fmt.Println("Error on request: ", error, " response: ", response.StatusCode)
+	if err != nil || response.StatusCode != 200 {
+		fmt.Println("Error on request: ", err, " response: ", response.StatusCode)
 		return false
 	} else {
 		return true
@@ -105,34 +110,34 @@ func (c *SimplyClient) RemoveTxtRecord(RecordId int, credentials Credentials) bo
 }
 
 // GetTxtRecord Fetch TXT record by data returns id
-func (c *SimplyClient) GetTxtRecord(TxtData string, credentials Credentials) int {
-	req, error := http.NewRequest("GET", apiUrl+"/my/products/"+c.Domain+"/dns/records", nil)
+func (c *SimplyClient) GetTxtRecord(TxtData string, DnsName string, credentials Credentials) int {
+	req, err := http.NewRequest("GET", apiUrl+"/my/products/"+domainutil.Domain(DnsName)+"/dns/records", nil)
 	req.SetBasicAuth(credentials.AccountName, credentials.ApiKey)
 	client := &http.Client{}
-	response, error := client.Do(req)
+	response, err := client.Do(req)
 
-	if error != nil || response.StatusCode != 200 {
-		fmt.Println("Error on request: ", error, " response: ", response.StatusCode)
+	if err != nil || response.StatusCode != 200 {
+		fmt.Println("Error on request: ", err, " response: ", response.StatusCode)
 	}
-	responseData, error := ioutil.ReadAll(response.Body)
+	responseData, err := ioutil.ReadAll(response.Body)
 
-	if error != nil {
-		fmt.Println("Error on read: ", error)
+	if err != nil {
+		fmt.Println("Error on read: ", err)
 	}
 
 	var records RecordResponse
 
-	error = json.Unmarshal(responseData, &records)
+	err = json.Unmarshal(responseData, &records)
 	var recordId int
 
-	if error == nil {
+	if err == nil {
 		for i := 0; i < len(records.Records); i++ {
 			if records.Records[i].Data == TxtData {
 				recordId = records.Records[i].RecordId
 			}
 		}
 	} else {
-		panic(error)
+		panic(err)
 	}
 
 	return recordId

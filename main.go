@@ -48,27 +48,45 @@ func (e *SimplyDnsSolver) Name() string {
 	return "simply-dns-solver"
 }
 func (e *SimplyDnsSolver) Present(ch *v1alpha1.ChallengeRequest) error {
-	cred, err2 := loadCredFromSecret(ch, e)
-	if err2 != nil {
-		return err2
+	fmt.Println("Challenge being presented...")
+	cred, err := loadCredFromSecret(ch, e)
+	if err != nil {
+		fmt.Println("Load credentials failed.")
+		fmt.Println(err)
+		return err
 	}
-	e.client.AddTxtRecord(ch.DNSName, ch.Key, cred)
+	id, err := e.client.AddTxtRecord(ch.DNSName, ch.Key, cred)
+	if err != nil {
+		return err
+	} else {
+		fmt.Println("Challenge have been created with id: ", id)
+	}
 	return nil
 }
 
 func (e *SimplyDnsSolver) CleanUp(ch *v1alpha1.ChallengeRequest) error {
+	fmt.Println("Challenge being cleaned up...")
 	cred, err2 := loadCredFromSecret(ch, e)
 	if err2 != nil {
+		fmt.Println("Load credentials failed.")
+		fmt.Println(err2)
 		return err2
 	}
-	Id := e.client.GetTxtRecord(ch.DNSName, cred)
-	e.client.RemoveTxtRecord(Id, cred)
+	Id := e.client.GetTxtRecord(ch.Key, ch.DNSName, cred)
+	fmt.Println("Record id ", Id, " fetched for cleanup.")
+	res := e.client.RemoveTxtRecord(Id, ch.DNSName, cred)
+	if res == true {
+		fmt.Println("Record(", Id, ") have been cleaned up.")
+	}
 	return nil
 }
 
 func (e *SimplyDnsSolver) Initialize(kubeClientConfig *rest.Config, stopCh <-chan struct{}) error {
+	fmt.Println("Initializing...")
 	cl, err := kubernetes.NewForConfig(kubeClientConfig)
 	if err != nil {
+		fmt.Println("Init failed with error: ")
+		fmt.Println(err)
 		return err
 	}
 
@@ -78,6 +96,7 @@ func (e *SimplyDnsSolver) Initialize(kubeClientConfig *rest.Config, stopCh <-cha
 }
 
 func loadConfig(cfgJSON *extapi.JSON) (SimplyDNSProviderConfig, error) {
+	fmt.Println("Loading config...")
 	cfg := SimplyDNSProviderConfig{}
 
 	if cfgJSON == nil {
@@ -100,17 +119,25 @@ func stringFromSecretData(secretData *map[string][]byte, key string) (string, er
 func loadCredFromSecret(ch *v1alpha1.ChallengeRequest, e *SimplyDnsSolver) (client.Credentials, error) {
 	cfg, err := loadConfig(ch.Config)
 	if err != nil {
+		fmt.Println("Error on reading config:")
+		fmt.Println(err)
 		return client.Credentials{}, err
 	}
 	secretName := cfg.SecretRef
+	fmt.Println("Secret reference:")
+	fmt.Println(secretName)
 	sec, err := e.kubeClient.CoreV1().Secrets(ch.ResourceNamespace).Get(context.TODO(), secretName, metav1.GetOptions{})
 	if err != nil {
+		fmt.Println("Error on loading secret from kubernetes api:")
+		fmt.Println(err)
 		return client.Credentials{}, err
 	}
 
 	accountName, err := stringFromSecretData(&sec.Data, "account-name")
 	apiKey, err := stringFromSecretData(&sec.Data, "api-key")
 	if err != nil {
+		fmt.Println("Error on reading secret:")
+		fmt.Println(err)
 		return client.Credentials{}, err
 	}
 
