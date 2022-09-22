@@ -7,6 +7,7 @@ import (
 	"github.com/bobesa/go-domain-util/domainutil"
 	"io/ioutil"
 	"net/http"
+	"net/http/httputil"
 	"strconv"
 )
 
@@ -72,8 +73,12 @@ func (c *SimplyClient) AddTxtRecord(Domain string, Value string, credentials Cre
 	req.Header.Set("Content-Type", "application/json; charset=UTF-8")
 	req.SetBasicAuth(credentials.AccountName, credentials.ApiKey)
 	fmt.Println("name: ", credentials.AccountName, "  key: ", credentials.ApiKey)
+	requestBytes, _ := httputil.DumpRequest(req, true)
+	fmt.Println(string(requestBytes))
 	client := &http.Client{}
 	response, err := client.Do(req)
+	responseBytes, _ := httputil.DumpResponse(response, true)
+	fmt.Println(string(responseBytes))
 
 	if err != nil || response.StatusCode != 200 {
 		fmt.Println("Error on request: ", err, " response: ", response.StatusCode)
