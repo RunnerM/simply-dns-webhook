@@ -55,7 +55,8 @@ func (e *SimplyDnsSolver) Present(ch *v1alpha1.ChallengeRequest) error {
 		fmt.Println(err)
 		return err
 	}
-	id, err := e.client.AddTxtRecord(ch.DNSName, ch.Key, cred)
+	fmt.Println("ResolvedFQDN: ", ch.ResolvedFQDN)
+	id, err := e.client.AddTxtRecord(ch.ResolvedFQDN, ch.Key, cred)
 	if err != nil {
 		return err
 	} else {

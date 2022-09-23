@@ -9,12 +9,12 @@
 groupName: com.github.runnerm.cert-manager-simply-webhook
 
 certManager:
-  namespace: cert-manager
-  serviceAccountName: cert-manager
+  namespace: kh-networking
+  serviceAccountName: kh-networking-simply-dns-webhook
 
 image:
   repository: runnerm/simply-dns-webhook
-  tag: alpha02
+  tag: beta01
   pullPolicy: IfNotPresent
 
 nameOverride: ""
