@@ -14,8 +14,8 @@ certManager:
 
 image:
   repository: runnerm/simply-dns-webhook
-  tag: beta01
-  pullPolicy: IfNotPresent
+  tag: beta02
+  pullPolicy: Always
 
 nameOverride: ""
 fullnameOverride: ""

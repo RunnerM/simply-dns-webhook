@@ -48,14 +48,12 @@ func (e *SimplyDnsSolver) Name() string {
 	return "simply-dns-solver"
 }
 func (e *SimplyDnsSolver) Present(ch *v1alpha1.ChallengeRequest) error {
-	fmt.Println("Challenge being presented...")
+	fmt.Println("Challenge being presented for: ", ch.ResolvedFQDN)
 	cred, err := loadCredFromSecret(ch, e)
 	if err != nil {
-		fmt.Println("Load credentials failed.")
-		fmt.Println(err)
+		fmt.Println("Load credentials failed: ", err)
 		return err
 	}
-	fmt.Println("ResolvedFQDN: ", ch.ResolvedFQDN)
 	id, err := e.client.AddTxtRecord(ch.ResolvedFQDN, ch.Key, cred)
 	if err != nil {
 		return err
@@ -67,11 +65,10 @@ func (e *SimplyDnsSolver) Present(ch *v1alpha1.ChallengeRequest) error {
 
 func (e *SimplyDnsSolver) CleanUp(ch *v1alpha1.ChallengeRequest) error {
 	fmt.Println("Challenge being cleaned up...")
-	cred, err2 := loadCredFromSecret(ch, e)
-	if err2 != nil {
-		fmt.Println("Load credentials failed.")
-		fmt.Println(err2)
-		return err2
+	cred, err := loadCredFromSecret(ch, e)
+	if err != nil {
+		fmt.Println("Load credentials failed: ", err)
+		return err
 	}
 	Id := e.client.GetTxtRecord(ch.Key, ch.DNSName, cred)
 	fmt.Println("Record id ", Id, " fetched for cleanup.")
@@ -86,13 +83,10 @@ func (e *SimplyDnsSolver) Initialize(kubeClientConfig *rest.Config, stopCh <-cha
 	fmt.Println("Initializing...")
 	cl, err := kubernetes.NewForConfig(kubeClientConfig)
 	if err != nil {
-		fmt.Println("Init failed with error: ")
-		fmt.Println(err)
+		fmt.Println("Init failed with error: ", err)
 		return err
 	}
-
 	e.kubeClient = cl
-
 	return nil
 }
 

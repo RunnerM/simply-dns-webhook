@@ -7,7 +7,6 @@ import (
 	"github.com/bobesa/go-domain-util/domainutil"
 	"io/ioutil"
 	"net/http"
-	"net/http/httputil"
 	"strconv"
 )
 
@@ -57,28 +56,26 @@ type Credentials struct {
 }
 
 // AddTxtRecord Add txt record to simply
-func (c *SimplyClient) AddTxtRecord(Domain string, Value string, credentials Credentials) (int, error) {
+func (c *SimplyClient) AddTxtRecord(FQDNName string, Value string, credentials Credentials) (int, error) {
+	// Trim one trailing dot
+	fqdnName := FQDNName
+	if last := len(fqdnName) - 1; last >= 0 && fqdnName[last] == '.' {
+		fqdnName = fqdnName[:last]
+	}
 	TXTRecordBody := CreateRecordBody{
 		Type:     "TXT",
-		Name:     domainutil.Subdomain(Domain),
+		Name:     domainutil.Subdomain(fqdnName),
 		Data:     Value,
 		Priority: 1,
 		Ttl:      3600,
 	}
 	postBody, _ := json.Marshal(TXTRecordBody)
-	fmt.Println("adding dns record: ")
-	fmt.Println(postBody)
 
-	req, err := http.NewRequest("POST", apiUrl+"/my/products/"+domainutil.Domain(Domain)+"/dns/records", bytes.NewBuffer(postBody))
+	req, err := http.NewRequest("POST", apiUrl+"/my/products/"+domainutil.Domain(fqdnName)+"/dns/records", bytes.NewBuffer(postBody))
 	req.Header.Set("Content-Type", "application/json; charset=UTF-8")
 	req.SetBasicAuth(credentials.AccountName, credentials.ApiKey)
-	fmt.Println("name: ", credentials.AccountName, "  key: ", credentials.ApiKey)
-	requestBytes, _ := httputil.DumpRequest(req, true)
-	fmt.Println(string(requestBytes))
 	client := &http.Client{}
 	response, err := client.Do(req)
-	responseBytes, _ := httputil.DumpResponse(response, true)
-	fmt.Println(string(responseBytes))
 
 	if err != nil || response.StatusCode != 200 {
 		fmt.Println("Error on request: ", err, " response: ", response.StatusCode)
@@ -93,7 +90,7 @@ func (c *SimplyClient) AddTxtRecord(Domain string, Value string, credentials Cre
 
 	err = json.Unmarshal(responseData, &data)
 	if err != nil {
-		panic(err)
+		fmt.Println("Error on unmarshalling: ", err)
 	}
 	return data.Record.Id, nil
 }
