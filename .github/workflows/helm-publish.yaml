@@ -21,12 +21,8 @@ jobs:
       id-token: write
 
     steps:
-      - name: Helm Push
-        uses: bsord/helm-push@v4.1.0
+      - uses: actions/checkout@v1
+      - uses: J12934/helm-gh-pages-action@master
         with:
-          useOCIRegistry: true
-          registry-url:  oci://ghcr.io/${{ github.repository }}
-          username: runnerm
           access-token: ${{ secrets.GITHUB_TOKEN }}
-          force: true
-          chart-folder: deploy/simply-dns-webhook
+          charts-folder: deploy
