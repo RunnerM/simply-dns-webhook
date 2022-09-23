@@ -24,5 +24,5 @@ jobs:
       - uses: actions/checkout@v1
       - uses: J12934/helm-gh-pages-action@master
         with:
-          access-token: ${{ secrets.ACCESS_TOKEN }}
+          access-token: ${{ secrets.GITHUB_TOKEN }}
           charts-folder: deploy
