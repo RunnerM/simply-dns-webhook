@@ -58,10 +58,7 @@ type Credentials struct {
 // AddTxtRecord Add txt record to simply
 func (c *SimplyClient) AddTxtRecord(FQDNName string, Value string, credentials Credentials) (int, error) {
 	// Trim one trailing dot
-	fqdnName := FQDNName
-	if last := len(fqdnName) - 1; last >= 0 && fqdnName[last] == '.' {
-		fqdnName = fqdnName[:last]
-	}
+	fqdnName := cutTrailingDotIfExist(FQDNName)
 	TXTRecordBody := CreateRecordBody{
 		Type:     "TXT",
 		Name:     domainutil.Subdomain(fqdnName),
@@ -70,7 +67,6 @@ func (c *SimplyClient) AddTxtRecord(FQDNName string, Value string, credentials C
 		Ttl:      3600,
 	}
 	postBody, _ := json.Marshal(TXTRecordBody)
-
 	req, err := http.NewRequest("POST", apiUrl+"/my/products/"+domainutil.Domain(fqdnName)+"/dns/records", bytes.NewBuffer(postBody))
 	req.Header.Set("Content-Type", "application/json; charset=UTF-8")
 	req.SetBasicAuth(credentials.AccountName, credentials.ApiKey)
@@ -99,7 +95,6 @@ func (c *SimplyClient) AddTxtRecord(FQDNName string, Value string, credentials C
 func (c *SimplyClient) RemoveTxtRecord(RecordId int, DnsName string, credentials Credentials) bool {
 	req, err := http.NewRequest("DELETE", apiUrl+"/my/products/"+domainutil.Domain(DnsName)+"/dns/records/"+strconv.Itoa(RecordId), nil)
 	req.SetBasicAuth(credentials.AccountName, credentials.ApiKey)
-	fmt.Println(credentials.AccountName, "  ", credentials.ApiKey)
 	client := &http.Client{}
 	response, err := client.Do(req)
 
@@ -112,29 +107,27 @@ func (c *SimplyClient) RemoveTxtRecord(RecordId int, DnsName string, credentials
 }
 
 // GetTxtRecord Fetch TXT record by data returns id
-func (c *SimplyClient) GetTxtRecord(TxtData string, DnsName string, credentials Credentials) int {
-	req, err := http.NewRequest("GET", apiUrl+"/my/products/"+domainutil.Domain(DnsName)+"/dns/records", nil)
+func (c *SimplyClient) GetTxtRecord(TxtData string, FQDNName string, credentials Credentials) int {
+	fqdnName := cutTrailingDotIfExist(FQDNName)
+	req, err := http.NewRequest("GET", apiUrl+"/my/products/"+domainutil.Domain(fqdnName)+"/dns/records", nil)
 	req.SetBasicAuth(credentials.AccountName, credentials.ApiKey)
 	client := &http.Client{}
 	response, err := client.Do(req)
-
 	if err != nil || response.StatusCode != 200 {
 		fmt.Println("Error on request: ", err, " response: ", response.StatusCode)
 	}
 	responseData, err := ioutil.ReadAll(response.Body)
-
 	if err != nil {
 		fmt.Println("Error on read: ", err)
 	}
 
 	var records RecordResponse
-
 	err = json.Unmarshal(responseData, &records)
 	var recordId int
 
 	if err == nil {
 		for i := 0; i < len(records.Records); i++ {
-			if records.Records[i].Data == TxtData {
+			if records.Records[i].Data == TxtData && records.Records[i].Name == domainutil.Subdomain(fqdnName) {
 				recordId = records.Records[i].RecordId
 			}
 		}
@@ -143,4 +136,35 @@ func (c *SimplyClient) GetTxtRecord(TxtData string, DnsName string, credentials 
 	}
 
 	return recordId
+}
+
+func (c *SimplyClient) UpdateTXTRecord(RecordId int, FQDNName string, Value string, credentials Credentials) (bool, error) {
+	// Trim one trailing dot
+	fqdnName := cutTrailingDotIfExist(FQDNName)
+	TXTRecordBody := CreateRecordBody{
+		Type:     "TXT",
+		Name:     domainutil.Subdomain(fqdnName),
+		Data:     Value,
+		Priority: 1,
+		Ttl:      3600,
+	}
+	putBody, _ := json.Marshal(TXTRecordBody)
+	req, err := http.NewRequest("PUT", apiUrl+"/my/products/"+domainutil.Domain(fqdnName)+"/dns/records/"+strconv.Itoa(RecordId), bytes.NewBuffer(putBody))
+	req.SetBasicAuth(credentials.AccountName, credentials.ApiKey)
+	client := &http.Client{}
+	response, err := client.Do(req)
+
+	if err != nil || response.StatusCode != 200 {
+		fmt.Println("Error on request: ", err, " response: ", response.StatusCode)
+		return false, err
+	}
+	return true, nil
+}
+
+func cutTrailingDotIfExist(FQDNName string) string {
+	fqdnName := FQDNName
+	if last := len(fqdnName) - 1; last >= 0 && fqdnName[last] == '.' {
+		fqdnName = fqdnName[:last]
+	}
+	return fqdnName
 }
