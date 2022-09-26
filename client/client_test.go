@@ -17,7 +17,7 @@ type testData struct {
 //Plot in your own api details for testing.
 func TestAll(t *testing.T) {
 	data := testData{
-		domain:      ".com",
+		domain:      ".com", //add your credentials here to test.
 		data:        "",
 		accountname: "",
 		apikey:      "",

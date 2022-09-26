@@ -1,6 +1,6 @@
 apiVersion: v2
 name: simply-dns-webhook
-description: A Helm chart for Simply.com dns01 challenge support for cert-manager
+description: A Helm chart for Simply.com dns01 challenge support for cert-manager. Refer to https://github.com/RunnerM/simply-dns-webhook for documentation.
 
 # A chart can be either an 'application' or a 'library' chart.
 #
