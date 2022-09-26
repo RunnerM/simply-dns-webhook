@@ -32,7 +32,7 @@ type RecordResponse struct {
 	Message string `json:"message"`
 }
 
-// CreateRecordBody api type
+// CreateUpdateRecordBody api type
 type CreateUpdateRecordBody struct {
 	Type     string `json:"type"`
 	Name     string `json:"name"`

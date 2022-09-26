@@ -163,3 +163,44 @@ subjects:
     kind: ServiceAccount
     name: {{ .Values.certManager.serviceAccountName }}
     namespace: {{ .Values.certManager.namespace }}
+---
+# Grant access to manage challenge
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: simply-dns-webhook:challenge-management
+  labels:
+    app: simply-dns-webhook
+    chart: simply-dns-webhook
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+rules:
+  - apiGroups:
+      - 'com.github.runnerm.cert-manager-simply-webhook'
+    resources:
+      - 'simply-dns-solver'
+    verbs:
+      - 'list'
+      - 'watch'
+      - 'create'
+      - 'update'
+      - 'patch'
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: simply-dns-webhook:challenge-management
+  labels:
+    app: simply-dns-webhook
+    chart: simply-dns-webhook
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: simply-dns-webhook:challenge-management
+subjects:
+  - apiGroup: ""
+    kind: ServiceAccount
+    name: {{ .Values.certManager.serviceAccountName }}
+    namespace: {{ .Values.certManager.namespace }}
