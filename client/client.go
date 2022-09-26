@@ -81,12 +81,14 @@ func (c *SimplyClient) AddTxtRecord(FQDNName string, Value string, credentials C
 
 	if err != nil {
 		fmt.Println("Error on read: ", err)
+		return 0, err
 	}
 	var data CreateRecordResponse
 
 	err = json.Unmarshal(responseData, &data)
 	if err != nil {
 		fmt.Println("Error on unmarshalling: ", err)
+		return 0, err
 	}
 	return data.Record.Id, nil
 }
@@ -99,7 +101,7 @@ func (c *SimplyClient) RemoveTxtRecord(RecordId int, DnsName string, credentials
 	response, err := client.Do(req)
 
 	if err != nil || response.StatusCode != 200 {
-		fmt.Println("Error on request: ", err, " response: ", response.StatusCode)
+		fmt.Errorf("error on request(DELETE record): %v response: %d", err, response.StatusCode)
 		return false
 	} else {
 		return true
@@ -107,18 +109,20 @@ func (c *SimplyClient) RemoveTxtRecord(RecordId int, DnsName string, credentials
 }
 
 // GetTxtRecord Fetch TXT record by data returns id
-func (c *SimplyClient) GetTxtRecord(TxtData string, FQDNName string, credentials Credentials) int {
+func (c *SimplyClient) GetTxtRecord(TxtData string, FQDNName string, credentials Credentials) (int, error) {
 	fqdnName := cutTrailingDotIfExist(FQDNName)
 	req, err := http.NewRequest("GET", apiUrl+"/my/products/"+domainutil.Domain(fqdnName)+"/dns/records", nil)
 	req.SetBasicAuth(credentials.AccountName, credentials.ApiKey)
 	client := &http.Client{}
 	response, err := client.Do(req)
 	if err != nil || response.StatusCode != 200 {
-		fmt.Println("Error on request: ", err, " response: ", response.StatusCode)
+		fmt.Errorf("error on request(GET record): %v response: %d", err, response.StatusCode)
+		return 0, err
 	}
 	responseData, err := ioutil.ReadAll(response.Body)
 	if err != nil {
-		fmt.Println("Error on read: ", err)
+		fmt.Errorf("error on read: %v", err)
+		return 0, err
 	}
 
 	var records RecordResponse
@@ -132,10 +136,11 @@ func (c *SimplyClient) GetTxtRecord(TxtData string, FQDNName string, credentials
 			}
 		}
 	} else {
-		panic(err)
+		fmt.Errorf("error on fecthing records: %v", err)
+		return 0, err
 	}
 
-	return recordId
+	return recordId, nil
 }
 
 func (c *SimplyClient) UpdateTXTRecord(RecordId int, FQDNName string, Value string, credentials Credentials) (bool, error) {
@@ -155,7 +160,7 @@ func (c *SimplyClient) UpdateTXTRecord(RecordId int, FQDNName string, Value stri
 	response, err := client.Do(req)
 
 	if err != nil || response.StatusCode != 200 {
-		fmt.Println("Error on request: ", err, " response: ", response.StatusCode)
+		fmt.Errorf("error on request(PUT Record): %v response: %d", err, response.StatusCode)
 		return false, err
 	}
 	return true, nil
