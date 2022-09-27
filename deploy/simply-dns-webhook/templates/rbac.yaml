@@ -161,7 +161,7 @@ roleRef:
 subjects:
   - apiGroup: ""
     kind: ServiceAccount
-    name: {{ include "simply-dns-webhook.fullname" }}
+    name: {{ include "simply-dns-webhook.fullname" . }}
     namespace: {{ .Values.certManager.namespace }}
 ---
 # Grant access to manage challenge
