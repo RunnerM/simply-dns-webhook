@@ -13,7 +13,7 @@ certManager:
   serviceAccountName: cert-manager
 
 image:
-  repository: ghcr.io/runnerm/simply-dns-webhook:v1.0.0
+  repository: ghcr.io/runnerm/simply-dns-webhook
   tag: v1.0.1
   pullPolicy: Always
 
