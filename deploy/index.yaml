@@ -3,10 +3,21 @@ entries:
   simply-dns-webhook:
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2022-09-27T10:28:56.21548+02:00"
+    created: "2022-09-27T12:00:57.1757927+02:00"
     description: A Helm chart for Simply.com dns01 challenge support for cert-manager.
       Refer to https://github.com/RunnerM/simply-dns-webhook for documentation.
-    digest: 69cc81aaae8261accaa2e2f21b5eb582d610576ec6d557afd0209f9b1d2be2b9
+    digest: db9729f7eee027cbb46b276e9210c538a6aa7cee25f2a710e0be748b7564f4ac
+    name: simply-dns-webhook
+    type: application
+    urls:
+    - https://runnerm.github.io/simply-dns-webhook/simply-dns-webhook-1.0.2.tgz
+    version: 1.0.2
+  - apiVersion: v2
+    appVersion: 1.0.0
+    created: "2022-09-27T12:00:57.1752734+02:00"
+    description: A Helm chart for Simply.com dns01 challenge support for cert-manager.
+      Refer to https://github.com/RunnerM/simply-dns-webhook for documentation.
+    digest: 569f661f2eacc3fef309d407b772627319e45017e295545c66aa33d5b338e7d9
     name: simply-dns-webhook
     type: application
     urls:
@@ -14,7 +25,7 @@ entries:
     version: 1.0.1
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2022-09-27T10:28:56.2149543+02:00"
+    created: "2022-09-27T12:00:57.1752734+02:00"
     description: A Helm chart for Simply.com dns01 challenge support for cert-manager.
       Refer to https://github.com/RunnerM/simply-dns-webhook for documentation.
     digest: 334532be5c3e14f9155ff0afaacfb8227a2e2589402c41b6d3fe262d26467fb4
@@ -23,4 +34,4 @@ entries:
     urls:
     - https://runnerm.github.io/simply-dns-webhook/simply-dns-webhook-1.0.0.tgz
     version: 1.0.0
-generated: "2022-09-27T10:28:56.2138429+02:00"
+generated: "2022-09-27T12:00:57.169959+02:00"
