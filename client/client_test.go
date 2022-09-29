@@ -23,8 +23,8 @@ func TestAll(t *testing.T) {
 		apikey:      "",
 	}
 	testAdd(t, data)
-	id := testGet(t, data)
-	testRemove(t, data, id)
+	//testGet(t, data)
+	//testRemove(t, data, 0)
 
 }
 
@@ -42,7 +42,7 @@ func testAdd(t *testing.T, data testData) {
 	fmt.Println(id)
 }
 func testRemove(t *testing.T, data testData, id int) {
-	res := fixture.RemoveTxtRecord(id, data.data, Credentials{
+	res := fixture.RemoveTxtRecord(id, data.domain, Credentials{
 		AccountName: data.accountname,
 		ApiKey:      data.apikey,
 	})
@@ -52,7 +52,7 @@ func testRemove(t *testing.T, data testData, id int) {
 
 }
 func testGet(t *testing.T, data testData) int {
-	id := fixture.GetTxtRecord(data.data, data.domain, Credentials{
+	id, _ := fixture.GetTxtRecord(data.data, data.domain, Credentials{
 		AccountName: data.accountname,
 		ApiKey:      data.apikey,
 	})

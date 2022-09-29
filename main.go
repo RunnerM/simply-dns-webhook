@@ -71,7 +71,7 @@ func (e *SimplyDnsSolver) CleanUp(ch *v1alpha1.ChallengeRequest) error {
 		fmt.Errorf("load credentials failed: %v", err)
 		return err
 	}
-	Id, err := e.client.GetTxtRecord(ch.Key, ch.DNSName, cred)
+	Id, err := e.client.GetTxtRecord(ch.Key, ch.ResolvedFQDN, cred)
 	if err != nil {
 		fmt.Errorf("error on fetching record: %v", err)
 		return err
