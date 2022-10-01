@@ -65,4 +65,25 @@ issuer/cluster issuer.
         namespace: kh-networking
     type: Opaque
 
-Special credits to: Keyhole Aps
+### cert-manager namespace:
+
+You may override values with your own values if you choose to install cert-manager in custom namespace as follows (this is necessary for proper functioning):
+
+    simply-dns-webhook:
+        certManager:
+            namespace: <cert-manager-namespace>
+            serviceAccountName: <cert-manager-namespace>
+
+### Resources:
+I leave the choice of the resource constraints to you since you know what you run the service on. ;) 
+
+    simply-dns-webhook:
+        resources: 
+            limits:
+                cpu: 100m  
+                memory: 128Mi
+            requests:
+                cpu: 100m
+                memory: 128Mi
+
+##### Special credits to: **Keyhole Aps**
