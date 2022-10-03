@@ -10,19 +10,21 @@ This service can be installed side by side with cert manager and can be used to 
 ### Deploy
 #### Helm chart: 
 Add repo:
-
+```shell
     helm repo add simply-dns-webhook https://runnerm.github.io/simply-dns-webhook/
+```
 Then:
-
+```shell
     helm install my-simply-dns-webhook simply-dns-webhook/simply-dns-webhook --version 1.0.3
-
+```
 #### As sub-chart:
+```YAML
     dependencies:
         - name: simply-dns-webhook
           version: 1.0.3
           repository: https://runnerm.github.io/simply-dns-webhook/
           alias: simply-dns-webhook
-
+```
 ### Usage:
 
 **Credentials secret:**
@@ -32,6 +34,7 @@ issuer/cluster issuer.
 
 
 #### Issuer/ClusterIssuer:
+```YAML
     apiVersion: cert-manager.io/v1
     kind: ClusterIssuer
     metadata:
@@ -52,9 +55,9 @@ issuer/cluster issuer.
             selector:
                 dnsZones:
                 - '<your_domain>'
-
+```
 #### Secret
-
+```YAML
     apiVersion: v1
     kind: Secret
     data:
@@ -62,21 +65,21 @@ issuer/cluster issuer.
         api-key: <your_api_key>
     metadata:
         name: simply-credentials # notice the name
-        namespace: kh-networking
+        namespace: <namespace-where-cer-manager-is-installed>
     type: Opaque
-
+```
 ### cert-manager namespace:
 
 You may override values with your own values if you choose to install cert-manager in custom namespace as follows (this is necessary for proper functioning):
-
+```YAML
     simply-dns-webhook:
         certManager:
             namespace: <cert-manager-namespace>
             serviceAccountName: <cert-manager-namespace>
-
+```
 ### Resources:
 I leave the choice of the resource constraints to you since you know what you run the service on. ;) 
-
+```YAML
     simply-dns-webhook:
         resources: 
             limits:
@@ -85,5 +88,5 @@ I leave the choice of the resource constraints to you since you know what you ru
             requests:
                 cpu: 100m
                 memory: 128Mi
-
+```
 ##### Special credits to: **Keyhole Aps**
