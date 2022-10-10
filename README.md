@@ -65,7 +65,7 @@ issuer/cluster issuer.
         api-key: <your_api_key>
     metadata:
         name: simply-credentials # notice the name
-        namespace: <namespace-where-cer-manager-is-installed>
+        namespace: <namespace-where-cert-manager-is-installed>
     type: Opaque
 ```
 ### cert-manager namespace:
@@ -92,7 +92,7 @@ I leave the choice of the resource constraints to you since you know what you ru
 
 ## Parameters
 
-The following table lists the configurable parameters of the cert-manager-webhook-hetzner chart, and their default values.
+The following table lists the configurable parameters of the simply-dns-webhook chart, and their default values.
 
 | Parameter                        | Description                                     | Default                                          |
 |----------------------------------|-------------------------------------------------|--------------------------------------------------|
