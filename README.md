@@ -41,7 +41,7 @@ issuer/cluster issuer.
         name: letsencrypt-nginx
     spec:
         acme:
-            email: mks@usekeyhole.com
+            email: <your_acme_email>
             server: https://acme-v02.api.letsencrypt.org/directory
             privateKeySecretRef:
                 name: letsencrypt-nginx-private-key
