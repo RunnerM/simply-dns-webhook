@@ -20,7 +20,7 @@ func TestRunsSuite(t *testing.T) {
 	fixture := dns.NewFixture(&SimplyDnsSolver{},
 		dns.SetResolvedZone(zone),
 		dns.SetAllowAmbientCredentials(false),
-		dns.SetManifestPath("testdata/my-custom-solver"),
+		//dns.SetManifestPath("testdata/my-custom-solver"),
 		//dns.SetBinariesPath("_test/kubebuilder/bin"),
 	)
 	//fixture := dns.NewFixture(&SimplyDnsSolver{},
