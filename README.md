@@ -7,6 +7,15 @@
 # Simply DNS webhook service for cert-manager support     [![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/simply-dns-webhook)](https://artifacthub.io/packages/search?repo=simply-dns-webhook)
 This service can be installed side by side with cert manager and can be used to handle dns-01 challeneges provided by cert manager. All documentation on how to configure dns-01 chalanges can be found at [cert-manager.io](https://cert-manager.io/docs/configuration/acme/dns01/webhook/)
 
+### Version support:
+The version compatibility I have tested for can be seen below:
+
+| cert-manager version | simply-dns-webhook version |
+|----------------------|----------------------------|
+| `1.9.0`              | `1.0.3`                    |
+| `1.10.1`             | `1.1.0`                    |
+
+
 ### Deploy
 #### Helm chart: 
 Add repo:
