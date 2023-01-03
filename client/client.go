@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/bobesa/go-domain-util/domainutil"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"strconv"
 )
@@ -77,7 +77,7 @@ func (c *SimplyClient) AddTxtRecord(FQDNName string, Value string, credentials C
 		fmt.Println("Error on request: ", err, " response: ", response.StatusCode)
 		return 0, err
 	}
-	responseData, err := ioutil.ReadAll(response.Body)
+	responseData, err := io.ReadAll(response.Body)
 
 	if err != nil {
 		fmt.Println("Error on read: ", err)
@@ -101,7 +101,7 @@ func (c *SimplyClient) RemoveTxtRecord(RecordId int, DnsName string, credentials
 	response, err := client.Do(req)
 
 	if err != nil || response.StatusCode != 200 {
-		fmt.Errorf("error on request(DELETE record): %v response: %d", err, response.StatusCode)
+		_ = fmt.Errorf("error on request(DELETE record): %v response: %d", err, response.StatusCode)
 		return false
 	} else {
 		return true
@@ -109,19 +109,56 @@ func (c *SimplyClient) RemoveTxtRecord(RecordId int, DnsName string, credentials
 }
 
 // GetTxtRecord Fetch TXT record by data returns id
-func (c *SimplyClient) GetTxtRecord(TxtData string, FQDNName string, credentials Credentials) (int, error) {
+func (c *SimplyClient) GetTxtRecord(FQDNName string, credentials Credentials) (int, string, error) {
 	fqdnName := cutTrailingDotIfExist(FQDNName)
 	req, err := http.NewRequest("GET", apiUrl+"/my/products/"+domainutil.Domain(fqdnName)+"/dns/records", nil)
 	req.SetBasicAuth(credentials.AccountName, credentials.ApiKey)
 	client := &http.Client{}
 	response, err := client.Do(req)
 	if err != nil || response.StatusCode != 200 {
-		fmt.Errorf("error on request(GET record): %v response: %d", err, response.StatusCode)
+		_ = fmt.Errorf("error on request(GET record): %v response: %d", err, response.StatusCode)
+		return 0, "", err
+	}
+	responseData, err := io.ReadAll(response.Body)
+	if err != nil {
+		_ = fmt.Errorf("error on read: %v", err)
+		return 0, "", err
+	}
+
+	var records RecordResponse
+	err = json.Unmarshal(responseData, &records)
+	var recordId int
+	var recordData string
+
+	if err == nil {
+		for i := 0; i < len(records.Records); i++ {
+			if records.Records[i].Type == "TXT" && records.Records[i].Name == domainutil.Subdomain(fqdnName) {
+				recordId = records.Records[i].RecordId
+				recordData = records.Records[i].Data
+				return recordId, recordData, nil
+			}
+		}
+	} else {
+		_ = fmt.Errorf("error on fecthing records: %v", err)
+		return 0, "", err
+	}
+	return 0, "", nil
+}
+
+// GetExactTxtRecord Fetch TXT record by data returns id of exact record
+func (c *SimplyClient) GetExactTxtRecord(TxtData string, FQDNName string, credentials Credentials) (int, error) {
+	fqdnName := cutTrailingDotIfExist(FQDNName)
+	req, err := http.NewRequest("GET", apiUrl+"/my/products/"+domainutil.Domain(fqdnName)+"/dns/records", nil)
+	req.SetBasicAuth(credentials.AccountName, credentials.ApiKey)
+	client := &http.Client{}
+	response, err := client.Do(req)
+	if err != nil || response.StatusCode != 200 {
+		_ = fmt.Errorf("error on request(GET record): %v response: %d", err, response.StatusCode)
 		return 0, err
 	}
-	responseData, err := ioutil.ReadAll(response.Body)
+	responseData, err := io.ReadAll(response.Body)
 	if err != nil {
-		fmt.Errorf("error on read: %v", err)
+		_ = fmt.Errorf("error on read: %v", err)
 		return 0, err
 	}
 
@@ -133,14 +170,15 @@ func (c *SimplyClient) GetTxtRecord(TxtData string, FQDNName string, credentials
 		for i := 0; i < len(records.Records); i++ {
 			if records.Records[i].Data == TxtData && records.Records[i].Name == domainutil.Subdomain(fqdnName) {
 				recordId = records.Records[i].RecordId
+
+				return recordId, nil
 			}
 		}
 	} else {
-		fmt.Errorf("error on fecthing records: %v", err)
+		_ = fmt.Errorf("error on fecthing records: %v", err)
 		return 0, err
 	}
-
-	return recordId, nil
+	return 0, nil
 }
 
 func (c *SimplyClient) UpdateTXTRecord(RecordId int, FQDNName string, Value string, credentials Credentials) (bool, error) {
@@ -155,12 +193,13 @@ func (c *SimplyClient) UpdateTXTRecord(RecordId int, FQDNName string, Value stri
 	}
 	putBody, _ := json.Marshal(TXTRecordBody)
 	req, err := http.NewRequest("PUT", apiUrl+"/my/products/"+domainutil.Domain(fqdnName)+"/dns/records/"+strconv.Itoa(RecordId), bytes.NewBuffer(putBody))
+	req.Header.Set("Content-Type", "application/json; charset=UTF-8")
 	req.SetBasicAuth(credentials.AccountName, credentials.ApiKey)
 	client := &http.Client{}
 	response, err := client.Do(req)
 
 	if err != nil || response.StatusCode != 200 {
-		fmt.Errorf("error on request(PUT Record): %v response: %d", err, response.StatusCode)
+		_ = fmt.Errorf("error on request(PUT Record): %v response: %d", err, response.StatusCode)
 		return false, err
 	}
 	return true, nil
