@@ -95,9 +95,12 @@ func (e *SimplyDnsSolver) CleanUp(ch *v1alpha1.ChallengeRequest) error {
 	res := e.client.RemoveTxtRecord(id, ch.DNSName, cred)
 	if res == true {
 		fmt.Println("Record(", id, ") have been cleaned up.")
+		return nil
+	} else {
+		_ = fmt.Errorf("record(%d) have no tbeen cleaned up", id)
 		return err
 	}
-	return nil
+
 }
 
 func (e *SimplyDnsSolver) Initialize(kubeClientConfig *rest.Config, stopCh <-chan struct{}) error {
