@@ -95,7 +95,8 @@ func (c *SimplyClient) AddTxtRecord(FQDNName string, Value string, credentials C
 
 // RemoveTxtRecord Remove TXT record from symply
 func (c *SimplyClient) RemoveTxtRecord(RecordId int, DnsName string, credentials Credentials) bool {
-	req, err := http.NewRequest("DELETE", apiUrl+"/my/products/"+DnsName+"/dns/records/"+strconv.Itoa(RecordId), nil)
+	dnsName := cutTrailingDotIfExist(DnsName)
+	req, err := http.NewRequest("DELETE", apiUrl+"/my/products/"+domainutil.Domain(dnsName)+"/dns/records/"+strconv.Itoa(RecordId), nil)
 	req.SetBasicAuth(credentials.AccountName, credentials.ApiKey)
 	client := &http.Client{}
 	response, err := client.Do(req)

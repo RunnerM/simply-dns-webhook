@@ -19,7 +19,6 @@ type testData struct {
 // Plot in your own api details for testing.
 func TestAll(t *testing.T) {
 	data := testData{ //add your credentials here to test.
-		basedomain:  "foo.com",
 		domain:      "_acme-challenge.foo.com",
 		data:        "test_txt_data",
 		data2:       "test_txt_data_2",
@@ -71,7 +70,7 @@ func testRemove(t *testing.T, data testData, id int) {
 		t.Fail()
 	}
 
-	res := fixture.RemoveTxtRecord(id, data.basedomain, Credentials{
+	res := fixture.RemoveTxtRecord(id, data.domain, Credentials{
 		AccountName: data.accountname,
 		ApiKey:      data.apikey,
 	})
