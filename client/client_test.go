@@ -10,21 +10,26 @@ var fixture SimplyClient
 type testData struct {
 	domain      string
 	data        string
+	data2       string
 	accountname string
 	apikey      string
+	basedomain  string
 }
 
-//Plot in your own api details for testing.
+// Plot in your own api details for testing.
 func TestAll(t *testing.T) {
-	data := testData{
-		domain:      ".com", //add your credentials here to test.
-		data:        "",
+	data := testData{ //add your credentials here to test.
+		basedomain:  "foo.com",
+		domain:      "_acme-challenge.foo.com",
+		data:        "test_txt_data",
+		data2:       "test_txt_data_2",
 		accountname: "",
 		apikey:      "",
 	}
 	testAdd(t, data)
-	//testGet(t, data)
-	//testRemove(t, data, 0)
+	id := testGet(t, data)
+	testUpdate(t, data, id)
+	testRemove(t, data, id)
 
 }
 
@@ -41,8 +46,32 @@ func testAdd(t *testing.T, data testData) {
 	}
 	fmt.Println(id)
 }
+
+func testUpdate(t *testing.T, data testData, id int) {
+	res, err := fixture.UpdateTXTRecord(id, data.domain, data.data2, Credentials{
+		AccountName: data.accountname,
+		ApiKey:      data.apikey,
+	})
+	if err != nil {
+		t.Fail()
+	}
+	if res != true {
+		t.Fail()
+	}
+	fmt.Println(id)
+}
+
 func testRemove(t *testing.T, data testData, id int) {
-	res := fixture.RemoveTxtRecord(id, data.domain, Credentials{
+	res2, _ := fixture.GetExactTxtRecord(data.data2, data.domain, Credentials{
+		AccountName: data.accountname,
+		ApiKey:      data.apikey,
+	})
+
+	if res2 != id {
+		t.Fail()
+	}
+
+	res := fixture.RemoveTxtRecord(id, data.basedomain, Credentials{
 		AccountName: data.accountname,
 		ApiKey:      data.apikey,
 	})
@@ -52,11 +81,14 @@ func testRemove(t *testing.T, data testData, id int) {
 
 }
 func testGet(t *testing.T, data testData) int {
-	id, _ := fixture.GetTxtRecord(data.data, data.domain, Credentials{
+	id, recData, _ := fixture.GetTxtRecord(data.domain, Credentials{
 		AccountName: data.accountname,
 		ApiKey:      data.apikey,
 	})
 	if id == 0 {
+		t.Fail()
+	}
+	if recData == "" {
 		t.Fail()
 	}
 	return id

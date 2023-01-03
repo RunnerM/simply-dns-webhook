@@ -51,35 +51,50 @@ func (e *SimplyDnsSolver) Present(ch *v1alpha1.ChallengeRequest) error {
 	fmt.Println("Challenge being presented for: ", ch.ResolvedFQDN)
 	cred, err := loadCredFromSecret(ch, e)
 	if err != nil {
-		fmt.Errorf("load credentials failed(check secret configuration): %v", err)
+		_ = fmt.Errorf("load credentials failed(check secret configuration): %v", err)
 		return err
 	}
-	id, err := e.client.AddTxtRecord(ch.ResolvedFQDN, ch.Key, cred)
-	if err != nil {
-		fmt.Errorf("presenting challenge failed: %v", err)
-		return err
-	} else {
+
+	id, txtData, fetchErr := e.client.GetTxtRecord(ch.ResolvedFQDN, cred)
+	if fetchErr == nil && id != 0 && txtData != ch.Key {
+		_, err := e.client.UpdateTXTRecord(id, ch.ResolvedFQDN, ch.Key, cred)
+		if err != nil {
+			_ = fmt.Errorf("presenting challenge failed: %v", err)
+			return err
+		}
 		fmt.Println("Challenge have been created with record id: ", id)
+		return nil
+	} else if fetchErr == nil && id != 0 && txtData == ch.Key {
+		fmt.Println("Challenge have been created with record id: ", id)
+		return nil
+	} else {
+		id, err = e.client.AddTxtRecord(ch.ResolvedFQDN, ch.Key, cred)
+		if err != nil {
+			_ = fmt.Errorf("presenting challenge failed: %v", err)
+			return err
+		} else {
+			fmt.Println("Challenge have been created with record id: ", id)
+		}
+		return nil
 	}
-	return nil
 }
 
 func (e *SimplyDnsSolver) CleanUp(ch *v1alpha1.ChallengeRequest) error {
 	fmt.Println("Challenge being cleaned up...")
 	cred, err := loadCredFromSecret(ch, e)
 	if err != nil {
-		fmt.Errorf("load credentials failed: %v", err)
+		_ = fmt.Errorf("load credentials failed: %v", err)
 		return err
 	}
-	Id, err := e.client.GetTxtRecord(ch.Key, ch.ResolvedFQDN, cred)
+	id, err := e.client.GetExactTxtRecord(ch.Key, ch.ResolvedFQDN, cred)
 	if err != nil {
-		fmt.Errorf("error on fetching record: %v", err)
+		_ = fmt.Errorf("error on fetching record: %v", err)
 		return err
 	}
-	fmt.Println("Record(", Id, ") fetched for cleanup.")
-	res := e.client.RemoveTxtRecord(Id, ch.DNSName, cred)
+	fmt.Println("Record(", id, ") fetched for cleanup.")
+	res := e.client.RemoveTxtRecord(id, ch.DNSName, cred)
 	if res == true {
-		fmt.Println("Record(", Id, ") have been cleaned up.")
+		fmt.Println("Record(", id, ") have been cleaned up.")
 		return err
 	}
 	return nil
@@ -89,7 +104,7 @@ func (e *SimplyDnsSolver) Initialize(kubeClientConfig *rest.Config, stopCh <-cha
 	fmt.Println("Initializing...")
 	cl, err := kubernetes.NewForConfig(kubeClientConfig)
 	if err != nil {
-		fmt.Errorf("init failed with error: %v", err)
+		_ = fmt.Errorf("init failed with error: %v", err)
 		return err
 	}
 	e.kubeClient = cl
@@ -120,7 +135,7 @@ func stringFromSecretData(secretData *map[string][]byte, key string) (string, er
 func loadCredFromSecret(ch *v1alpha1.ChallengeRequest, e *SimplyDnsSolver) (client.Credentials, error) {
 	cfg, err := loadConfig(ch.Config)
 	if err != nil {
-		fmt.Errorf("error on reading config: %v", err)
+		_ = fmt.Errorf("error on reading config: %v", err)
 		return client.Credentials{}, err
 	}
 	secretName := cfg.SecretRef
@@ -128,14 +143,14 @@ func loadCredFromSecret(ch *v1alpha1.ChallengeRequest, e *SimplyDnsSolver) (clie
 	fmt.Println(secretName)
 	sec, err := e.kubeClient.CoreV1().Secrets(ch.ResourceNamespace).Get(context.TODO(), secretName, metav1.GetOptions{})
 	if err != nil {
-		fmt.Errorf("error on loading secret from kubernetes api: %v", err)
+		_ = fmt.Errorf("error on loading secret from kubernetes api: %v", err)
 		return client.Credentials{}, err
 	}
 
 	accountName, err := stringFromSecretData(&sec.Data, "account-name")
 	apiKey, err := stringFromSecretData(&sec.Data, "api-key")
 	if err != nil {
-		fmt.Errorf("error on reading secret: %v", err)
+		_ = fmt.Errorf("error on reading secret: %v", err)
 		return client.Credentials{}, err
 	}
 
