@@ -1,4 +1,4 @@
-module simply-dns-webhook
+module github.com/runnerm/simply-dns-webhook
 
 go 1.19
 

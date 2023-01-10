@@ -13,7 +13,8 @@ The version compatibility I have tested for can be seen below:
 | cert-manager version | simply-dns-webhook version |
 |----------------------|----------------------------|
 | `1.9.0`              | `1.0.3`                    |
-| `1.10.1`             | `1.1.0`                    |
+| `1.10.1`             | `1.1.0`- `1.1.1`           |
+
 
 
 ### Deploy
@@ -24,13 +25,13 @@ Add repo:
 ```
 Then:
 ```shell
-    helm install my-simply-dns-webhook simply-dns-webhook/simply-dns-webhook --version 1.1.0
+    helm install my-simply-dns-webhook simply-dns-webhook/simply-dns-webhook --version 1.1.1
 ```
 #### As sub-chart:
 ```YAML
     dependencies:
         - name: simply-dns-webhook
-          version: 1.1.0
+          version: 1.1.1
           repository: https://runnerm.github.io/simply-dns-webhook/
           alias: simply-dns-webhook
 ```
@@ -109,7 +110,7 @@ The following table lists the configurable parameters of the simply-dns-webhook 
 | `certManager.namespace`          | cert-manager namespace                          | `cert-manager`                                   |
 | `certManager.serviceAccountName` | cert-manager service account name               | `cert-manager`                                   |
 | `image.repository`               | Docker image repository                         | `deyaeddin/cert-manager-webhook-hetzner`         |
-| `image.tag`                      | Docker image tag                                | `v1.1.0`                                         |
+| `image.tag`                      | Docker image tag                                | `v1.1.1`                                         |
 | `image.pullPolicy`               | Docker image pull policy                        | `Always`                                         |
 | `nameOverride`                   | Name override for the chart                     | `""`                                             |
 | `fullnameOverride`               | Full name override for the chart                | `""`                                             |
