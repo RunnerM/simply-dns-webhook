@@ -94,12 +94,12 @@ func (e *SimplyDnsSolver) CleanUp(ch *v1alpha1.ChallengeRequest) error {
 		return err
 	}
 	fmt.Println("Record(", id, ") fetched for cleanup.")
-	res := e.client.RemoveTxtRecord(id, ch.DNSName, cred)
+	res := e.client.RemoveTxtRecord(id, ch.ResolvedFQDN, cred)
 	if res == true {
 		fmt.Println("Record(", id, ") have been cleaned up.")
 		return nil
 	} else {
-		_ = fmt.Errorf("record(%d) have no tbeen cleaned up", id)
+		_ = fmt.Errorf("record(%d) have not been cleaned up", id)
 		return err
 	}
 

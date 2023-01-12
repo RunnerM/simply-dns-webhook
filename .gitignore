@@ -2,3 +2,4 @@
 _test
 _out
 oryxBuildBinary
+testdata/simply-dns-webhook/config.json
