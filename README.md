@@ -66,6 +66,15 @@ issuer/cluster issuer.
                 dnsZones:
                 - '<your_domain>'
 ```
+
+**Credentials in config:**
+You may choose to use the webhook configuration directly as shown below.
+**_(use it at your own risk)_**
+```diff
+-              secretName: simply-credentials # notice the name
++              accountName: "<account-name>"
++              apiKey: "<api-key>"
+```
 #### Secret
 ```YAML
     apiVersion: v1
