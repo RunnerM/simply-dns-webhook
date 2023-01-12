@@ -20,7 +20,7 @@ func TestRunsSuite(t *testing.T) {
 	fixture := dns.NewFixture(&SimplyDnsSolver{},
 		dns.SetResolvedZone(zone),
 		dns.SetAllowAmbientCredentials(false),
-		//dns.SetManifestPath("testdata/my-custom-solver"),
+		dns.SetManifestPath("testdata/my-custom-solver"),
 		//dns.SetBinariesPath("_test/kubebuilder/bin"),
 	)
 	//fixture := dns.NewFixture(&SimplyDnsSolver{},
@@ -30,7 +30,7 @@ func TestRunsSuite(t *testing.T) {
 	//	dns.SetUseAuthoritative(false),
 	//)
 	//need to uncomment and  RunConformance delete runBasic and runExtended once https://github.com/cert-manager/cert-manager/pull/4835 is merged
-	//fixture.RunConformance(t)
-	fixture.RunBasic(t)
-	fixture.RunExtended(t)
+	fixture.RunConformance(t)
+	//fixture.RunBasic(t)
+	//fixture.RunExtended(t)
 }
