@@ -36,7 +36,9 @@ type SimplyDNSProviderConfig struct {
 	// to be decoded.
 	// These fields will be set by users in the
 	// `issuer.spec.acme.dns01.providers.webhook.config` field.
-	SecretRef string `json:"secretName"`
+	SecretRef   string `json:"secretName"`
+	AccountName string `json:"accountName"`
+	ApiKey      string `json:"apiKey"`
 }
 
 type SimplyDnsSolver struct {
@@ -49,7 +51,7 @@ func (e *SimplyDnsSolver) Name() string {
 }
 func (e *SimplyDnsSolver) Present(ch *v1alpha1.ChallengeRequest) error {
 	fmt.Println("Challenge being presented for: ", ch.ResolvedFQDN)
-	cred, err := loadCredFromSecret(ch, e)
+	cred, err := loadCredentials(ch, e)
 	if err != nil {
 		_ = fmt.Errorf("load credentials failed(check secret configuration): %v", err)
 		return err
@@ -81,7 +83,7 @@ func (e *SimplyDnsSolver) Present(ch *v1alpha1.ChallengeRequest) error {
 
 func (e *SimplyDnsSolver) CleanUp(ch *v1alpha1.ChallengeRequest) error {
 	fmt.Println("Challenge being cleaned up...")
-	cred, err := loadCredFromSecret(ch, e)
+	cred, err := loadCredentials(ch, e)
 	if err != nil {
 		_ = fmt.Errorf("load credentials failed: %v", err)
 		return err
@@ -92,12 +94,12 @@ func (e *SimplyDnsSolver) CleanUp(ch *v1alpha1.ChallengeRequest) error {
 		return err
 	}
 	fmt.Println("Record(", id, ") fetched for cleanup.")
-	res := e.client.RemoveTxtRecord(id, ch.DNSName, cred)
+	res := e.client.RemoveTxtRecord(id, ch.ResolvedFQDN, cred)
 	if res == true {
 		fmt.Println("Record(", id, ") have been cleaned up.")
 		return nil
 	} else {
-		_ = fmt.Errorf("record(%d) have no tbeen cleaned up", id)
+		_ = fmt.Errorf("record(%d) have not been cleaned up", id)
 		return err
 	}
 
@@ -135,30 +137,38 @@ func stringFromSecretData(secretData *map[string][]byte, key string) (string, er
 	return string(data), nil
 }
 
-func loadCredFromSecret(ch *v1alpha1.ChallengeRequest, e *SimplyDnsSolver) (client.Credentials, error) {
+func loadCredentials(ch *v1alpha1.ChallengeRequest, e *SimplyDnsSolver) (client.Credentials, error) {
 	cfg, err := loadConfig(ch.Config)
 	if err != nil {
 		_ = fmt.Errorf("error on reading config: %v", err)
 		return client.Credentials{}, err
 	}
-	secretName := cfg.SecretRef
-	fmt.Println("Secret reference:")
-	fmt.Println(secretName)
-	sec, err := e.kubeClient.CoreV1().Secrets(ch.ResourceNamespace).Get(context.TODO(), secretName, metav1.GetOptions{})
-	if err != nil {
-		_ = fmt.Errorf("error on loading secret from kubernetes api: %v", err)
-		return client.Credentials{}, err
-	}
+	if cfg.AccountName != "" && cfg.ApiKey != "" {
+		fmt.Println("Loading API credentials from config.")
+		cred := client.Credentials{
+			AccountName: cfg.AccountName, ApiKey: cfg.ApiKey,
+		}
+		return cred, nil
+	} else {
+		secretName := cfg.SecretRef
+		fmt.Println("Loading API credentials, secret reference:")
+		fmt.Println(secretName)
+		sec, err := e.kubeClient.CoreV1().Secrets(ch.ResourceNamespace).Get(context.TODO(), secretName, metav1.GetOptions{})
+		if err != nil {
+			_ = fmt.Errorf("error on loading secret from kubernetes api: %v", err)
+			return client.Credentials{}, err
+		}
 
-	accountName, err := stringFromSecretData(&sec.Data, "account-name")
-	apiKey, err := stringFromSecretData(&sec.Data, "api-key")
-	if err != nil {
-		_ = fmt.Errorf("error on reading secret: %v", err)
-		return client.Credentials{}, err
-	}
+		accountName, err := stringFromSecretData(&sec.Data, "account-name")
+		apiKey, err := stringFromSecretData(&sec.Data, "api-key")
+		if err != nil {
+			_ = fmt.Errorf("error on reading secret: %v", err)
+			return client.Credentials{}, err
+		}
 
-	cred := client.Credentials{
-		AccountName: accountName, ApiKey: apiKey,
+		cred := client.Credentials{
+			AccountName: accountName, ApiKey: apiKey,
+		}
+		return cred, nil
 	}
-	return cred, nil
 }
