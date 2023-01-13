@@ -109,6 +109,14 @@ I leave the choice of the resource constraints to you since you know what you ru
                 memory: 128Mi
 ```
 
+## Running the test suite
+
+Update [config](testdata/simply-dns-webhook/config.json) with your API credentials and run:
+
+```bash
+$ TEST_ZONE_NAME=example.com. make test
+```
+
 ## Parameters
 
 The following table lists the configurable parameters of the simply-dns-webhook chart, and their default values.
