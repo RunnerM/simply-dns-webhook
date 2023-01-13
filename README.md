@@ -13,7 +13,7 @@ The version compatibility I have tested for can be seen below:
 | cert-manager version | simply-dns-webhook version |
 |----------------------|----------------------------|
 | `1.9.0`              | `1.0.3`                    |
-| `1.10.1`             | `1.1.0`- `1.1.1`           |
+| `1.10.1`             | `1.1.0`- `1.1.2`           |
 
 
 
@@ -25,13 +25,13 @@ Add repo:
 ```
 Then:
 ```shell
-    helm install my-simply-dns-webhook simply-dns-webhook/simply-dns-webhook --version 1.1.1
+    helm install my-simply-dns-webhook simply-dns-webhook/simply-dns-webhook --version 1.1.2
 ```
 #### As sub-chart:
 ```YAML
     dependencies:
         - name: simply-dns-webhook
-          version: 1.1.1
+          version: 1.1.2
           repository: https://runnerm.github.io/simply-dns-webhook/
           alias: simply-dns-webhook
 ```
@@ -62,7 +62,7 @@ issuer/cluster issuer.
                     solverName: simply-dns-solver
                     config:
                         secretName: simply-credentials # notice the name
-            selector:
+              selector:
                 dnsZones:
                 - '<your_domain>'
 ```
@@ -109,9 +109,9 @@ I leave the choice of the resource constraints to you since you know what you ru
                 memory: 128Mi
 ```
 
-## Running the test suite
+### Running the test suite:
 
-Update [config](testdata/simply-dns-webhook/config.json) with your API credentials and run:
+Update the [config](testdata/simply-dns-webhook/config.json) or the [simply-credentials](testdata/simply-dns-webhook/simply-credentials.yaml) secret with your API credentials and run:
 
 ```bash
 $ TEST_ZONE_NAME=example.com. make test
