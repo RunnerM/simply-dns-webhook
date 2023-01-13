@@ -4,6 +4,7 @@ import (
 	"github.com/cert-manager/cert-manager/test/acme/dns"
 	"os"
 	"testing"
+	"time"
 )
 
 var (
@@ -17,10 +18,15 @@ func TestRunsSuite(t *testing.T) {
 	//
 
 	// Uncomment the below fixture when implementing your custom DNS provider
+	propLimit, _ := time.ParseDuration("10m")
+	pollInterval, _ := time.ParseDuration("30s")
 	fixture := dns.NewFixture(&SimplyDnsSolver{},
 		dns.SetResolvedZone(zone),
 		dns.SetAllowAmbientCredentials(false),
 		dns.SetManifestPath("testdata/simply-dns-webhook"),
+		dns.SetPropagationLimit(propLimit),
+		dns.SetPollInterval(pollInterval),
+		//dns.SetStrict(true), // concurrent challenges on same domain is obsolete
 		//dns.SetBinariesPath("_test/kubebuilder/bin"),
 	)
 	//fixture := dns.NewFixture(&SimplyDnsSolver{},
