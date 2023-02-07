@@ -18,7 +18,7 @@ func TestRunsSuite(t *testing.T) {
 	//
 
 	// Uncomment the below fixture when implementing your custom DNS provider
-	propLimit, _ := time.ParseDuration("10m")
+	propLimit, _ := time.ParseDuration("20m")
 	pollInterval, _ := time.ParseDuration("30s")
 	fixture := dns.NewFixture(&SimplyDnsSolver{},
 		dns.SetResolvedZone(zone),
