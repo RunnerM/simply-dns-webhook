@@ -12,8 +12,8 @@ The version compatibility I have tested for can be seen below:
 
 | cert-manager version | simply-dns-webhook version |
 |----------------------|----------------------------|
-| `1.9.0`              | `1.0.3`                    |
-| `1.10.1`             | `1.1.0`- `1.1.2`           |
+| `1.9.x`              | `1.0.3`                    |
+| `1.10.x`             | `1.1.0`- `1.1.3`           |
 
 
 
@@ -25,13 +25,13 @@ Add repo:
 ```
 Then:
 ```shell
-    helm install my-simply-dns-webhook simply-dns-webhook/simply-dns-webhook --version 1.1.2
+    helm install my-simply-dns-webhook simply-dns-webhook/simply-dns-webhook --version 1.1.3
 ```
 #### As sub-chart:
 ```YAML
     dependencies:
         - name: simply-dns-webhook
-          version: 1.1.2
+          version: 1.1.3
           repository: https://runnerm.github.io/simply-dns-webhook/
           alias: simply-dns-webhook
 ```
