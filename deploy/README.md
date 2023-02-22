@@ -7,6 +7,16 @@
 # Simply DNS webhook service for cert-manager support     [![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/simply-dns-webhook)](https://artifacthub.io/packages/search?repo=simply-dns-webhook)
 This service can be installed side by side with cert manager and can be used to handle dns-01 challeneges provided by cert manager. All documentation on how to configure dns-01 chalanges can be found at [cert-manager.io](https://cert-manager.io/docs/configuration/acme/dns01/webhook/)
 
+### Version support:
+The version compatibility I have tested for can be seen below:
+
+| cert-manager version | simply-dns-webhook version |
+|----------------------|----------------------------|
+| `1.9.x`              | `1.0.3`                    |
+| `1.10.x`             | `1.1.0`- `1.1.3`           |
+
+
+
 ### Deploy
 #### Helm chart: 
 Add repo:
@@ -15,13 +25,13 @@ Add repo:
 ```
 Then:
 ```shell
-    helm install my-simply-dns-webhook simply-dns-webhook/simply-dns-webhook --version 1.0.3
+    helm install my-simply-dns-webhook simply-dns-webhook/simply-dns-webhook --version 1.1.3
 ```
 #### As sub-chart:
 ```YAML
     dependencies:
         - name: simply-dns-webhook
-          version: 1.0.3
+          version: 1.1.3
           repository: https://runnerm.github.io/simply-dns-webhook/
           alias: simply-dns-webhook
 ```
@@ -52,9 +62,18 @@ issuer/cluster issuer.
                     solverName: simply-dns-solver
                     config:
                         secretName: simply-credentials # notice the name
-            selector:
+              selector:
                 dnsZones:
                 - '<your_domain>'
+```
+
+**Credentials in config:**
+You may choose to use the webhook configuration directly as shown below.
+**_(use it at your own risk)_**
+```diff
+-              secretName: simply-credentials # notice the name
++              accountName: "<account-name>"
++              apiKey: "<api-key>"
 ```
 #### Secret
 ```YAML
@@ -65,7 +84,7 @@ issuer/cluster issuer.
         api-key: <your_api_key>
     metadata:
         name: simply-credentials # notice the name
-        namespace: <namespace-where-cer-manager-is-installed>
+        namespace: <namespace-where-cert-manager-is-installed>
     type: Opaque
 ```
 ### cert-manager namespace:
@@ -90,9 +109,17 @@ I leave the choice of the resource constraints to you since you know what you ru
                 memory: 128Mi
 ```
 
+### Running the test suite:
+
+Update the [config](testdata/simply-dns-webhook/config.json) or the [simply-credentials](testdata/simply-dns-webhook/simply-credentials.yaml) secret with your API credentials and run:
+
+```bash
+$ TEST_ZONE_NAME=example.com. make test
+```
+
 ## Parameters
 
-The following table lists the configurable parameters of the cert-manager-webhook-hetzner chart, and their default values.
+The following table lists the configurable parameters of the simply-dns-webhook chart, and their default values.
 
 | Parameter                        | Description                                     | Default                                          |
 |----------------------------------|-------------------------------------------------|--------------------------------------------------|
@@ -100,7 +127,7 @@ The following table lists the configurable parameters of the cert-manager-webhoo
 | `certManager.namespace`          | cert-manager namespace                          | `cert-manager`                                   |
 | `certManager.serviceAccountName` | cert-manager service account name               | `cert-manager`                                   |
 | `image.repository`               | Docker image repository                         | `deyaeddin/cert-manager-webhook-hetzner`         |
-| `image.tag`                      | Docker image tag                                | `v1.0.3`                                         |
+| `image.tag`                      | Docker image tag                                | `v1.1.1`                                         |
 | `image.pullPolicy`               | Docker image pull policy                        | `Always`                                         |
 | `nameOverride`                   | Name override for the chart                     | `""`                                             |
 | `fullnameOverride`               | Full name override for the chart                | `""`                                             |
