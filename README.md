@@ -128,8 +128,8 @@ The following table lists the configurable parameters of the simply-dns-webhook 
 | `certManager.namespace`          | cert-manager namespace                          | `cert-manager`                                   |
 | `certManager.serviceAccountName` | cert-manager service account name               | `cert-manager`                                   |
 | `image.repository`               | Docker image repository                         | `deyaeddin/cert-manager-webhook-hetzner`         |
-| `image.tag`                      | Docker image tag                                | `v1.1.1`                                         |
-| `image.pullPolicy`               | Docker image pull policy                        | `Always`                                         |
+| `image.tag`                      | Docker image tag                                | `v1.2.0`                                         |
+| `image.pullPolicy`               | Docker image pull policy                        | `IfNotPresent`                                   |
 | `nameOverride`                   | Name override for the chart                     | `""`                                             |
 | `fullnameOverride`               | Full name override for the chart                | `""`                                             |
 | `service.type`                   | Service type                                    | `ClusterIP`                                      |
