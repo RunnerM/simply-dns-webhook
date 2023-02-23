@@ -3,7 +3,8 @@ package main
 import (
 	"github.com/cert-manager/cert-manager/test/acme/dns"
 	"os"
-	"testing"
+    //"reflect"
+    "testing"
 	"time"
 )
 
@@ -20,7 +21,7 @@ func TestRunsSuite(t *testing.T) {
 	// Uncomment the below fixture when implementing your custom DNS provider
 	propLimit, _ := time.ParseDuration("20m")
 	pollInterval, _ := time.ParseDuration("30s")
-	fixture := dns.NewFixture(&SimplyDnsSolver{},
+	fixture := dns.NewFixture("SimplyDnsSolver",
 		dns.SetResolvedZone(zone),
 		dns.SetAllowAmbientCredentials(false),
 		dns.SetManifestPath("testdata/simply-dns-webhook"),
@@ -29,12 +30,6 @@ func TestRunsSuite(t *testing.T) {
 		//dns.SetStrict(true), // concurrent challenges on same domain is obsolete
 		//dns.SetBinariesPath("_test/kubebuilder/bin"),
 	)
-	//fixture := dns.NewFixture(&SimplyDnsSolver{},
-	//	dns.SetResolvedZone("example.com."),
-	//	dns.SetManifestPath("testdata/simply-dns-webhook"),
-	//	dns.SetDNSServer("127.0.0.1:59351"),
-	//	dns.SetUseAuthoritative(false),
-	//)
 	//need to uncomment and  RunConformance delete runBasic and runExtended once https://github.com/cert-manager/cert-manager/pull/4835 is merged
 	fixture.RunConformance(t)
 	//fixture.RunBasic(t)
