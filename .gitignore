@@ -3,3 +3,8 @@ _test
 _out
 oryxBuildBinary
 testdata/simply-dns-webhook/config.json
+run.json
+settings.json
+
+testdata/simply-dns-webhook/simply-credentials.yaml
+apiserver.local.config/certificates
