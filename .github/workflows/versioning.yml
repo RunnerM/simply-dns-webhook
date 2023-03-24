@@ -1,0 +1,37 @@
+name: Tagging
+
+on:
+  push:
+    branches: [ "master" , "feature/**" ]
+
+jobs:
+    create-tag:
+
+      runs-on: ubuntu-latest
+      #permisions to commit to repo
+      permissions:
+        contents: write
+
+      steps:
+
+        - name: Checkout
+          uses: actions/checkout@v2
+          with:
+            fetch-depth: 0
+
+        - name: Install GitVersion
+          uses: gittools/actions/gitversion/setup@v0
+          with:
+            versionSpec: '5.x'
+
+        - name: Determine Version
+          uses: gittools/actions/gitversion/execute@v0
+          with:
+            useConfigFile: true
+            configFilePath: GitVersion.yml
+
+        - name: Assemble Helm Chart
+          run:
+
+        - name: Tag
+          run: .github/ci/version-tagging.sh ${{ env.semVer }}
