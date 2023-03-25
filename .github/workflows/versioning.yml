@@ -1,8 +1,8 @@
-name: Tagging
+name: Versioning
 
 on:
   push:
-    branches: [ "master" , "feature/**" ]
+    branches: [ "master" ]
 
 jobs:
     create-tag:
@@ -31,7 +31,7 @@ jobs:
             configFilePath: GitVersion.yml
 
         - name: Assemble Helm Chart
-          run:
+          run: .github/ci/package-helm-chart.sh ${{ env.semVer }}
 
-        - name: Tag
+        - name: Tag Version and Push
           run: .github/ci/version-tagging.sh ${{ env.semVer }}
