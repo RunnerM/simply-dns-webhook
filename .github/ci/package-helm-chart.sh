@@ -14,3 +14,10 @@ cd deploy
 helm lint simply-dns-webhook
 helm package simply-dns-webhook --version $VERSION --app-version $VERSION
 helm repo index . --url https://runnerm.github.io/simply-dns-webhook/
+
+git config --global user.email "ci-bot@runnerm.com"
+git config --global user.name "simple-dns-webhook CI robot"
+
+git add --all
+git commit -m "Chore: Update helm chart for version $VERSION"
+git push
