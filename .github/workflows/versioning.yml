@@ -1,8 +1,8 @@
 name: Versioning
 
-on:
-  push:
-    branches: [ "master" ]
+#on:
+#  push:
+##    branches: [ "master" ]
 
 jobs:
     create-tag:

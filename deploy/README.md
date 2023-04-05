@@ -1,4 +1,3 @@
-
 <p align="center">
   <img src="https://user-images.githubusercontent.com/51089137/193522982-c0792104-7ecd-4e6c-a4a9-56b066b65331.png" height="156" width="312" alt="logo" />
 </p>
@@ -12,8 +11,9 @@ The version compatibility I have tested for can be seen below:
 
 | cert-manager version | simply-dns-webhook version |
 |----------------------|----------------------------|
-| `1.9.x`              | `1.0.3`                    |
-| `1.10.x`             | `1.1.0`- `1.1.3`           |
+| `1.9.x`              | `1.0.x`                    |
+| `1.10.x`             | `1.1.x`                    |
+| `1.11.x`             | `1.2.x`                    |
 
 
 
@@ -25,13 +25,13 @@ Add repo:
 ```
 Then:
 ```shell
-    helm install my-simply-dns-webhook simply-dns-webhook/simply-dns-webhook --version 1.1.3
+    helm install my-simply-dns-webhook simply-dns-webhook/simply-dns-webhook --version 1.2.1
 ```
 #### As sub-chart:
 ```YAML
     dependencies:
         - name: simply-dns-webhook
-          version: 1.1.3
+          version: 1.2.1
           repository: https://runnerm.github.io/simply-dns-webhook/
           alias: simply-dns-webhook
 ```
@@ -127,8 +127,8 @@ The following table lists the configurable parameters of the simply-dns-webhook 
 | `certManager.namespace`          | cert-manager namespace                          | `cert-manager`                                   |
 | `certManager.serviceAccountName` | cert-manager service account name               | `cert-manager`                                   |
 | `image.repository`               | Docker image repository                         | `deyaeddin/cert-manager-webhook-hetzner`         |
-| `image.tag`                      | Docker image tag                                | `v1.1.1`                                         |
-| `image.pullPolicy`               | Docker image pull policy                        | `Always`                                         |
+| `image.tag`                      | Docker image tag                                | `v1.2.1`                                         |
+| `image.pullPolicy`               | Docker image pull policy                        | `IfNotPresent`                                   |
 | `nameOverride`                   | Name override for the chart                     | `""`                                             |
 | `fullnameOverride`               | Full name override for the chart                | `""`                                             |
 | `service.type`                   | Service type                                    | `ClusterIP`                                      |
