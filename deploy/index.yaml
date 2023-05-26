@@ -3,16 +3,42 @@ entries:
   simply-dns-webhook:
   - apiVersion: v2
     appVersion: 1.3.0
-    created: "2023-05-25T22:38:52.874115834+02:00"
+    created: "2023-05-26T10:25:18.29744494+02:00"
     description: A Helm chart for Simply.com dns01 challenge support for cert-manager.
       Refer to https://github.com/RunnerM/simply-dns-webhook for documentation.
-    digest: 4c7112d2412849488f74ed839546327101416bd5427bc6e8a7322795988a91be
+    digest: c743ade64f435c0739e9adb2420308b4797cda7ac7ecfa02edb239e8b7fd7e3e
+    home: https://runnerm.github.io/simply-dns-webhook/README.md
     icon: https://user-images.githubusercontent.com/51089137/195098737-fc66a30f-6174-45ed-b995-3f2689dafd2e.png
+    maintainers:
+    - email: pentek.marci@gmail.com
+      name: runnerm
+      url: https://github.com/runnerm
     name: simply-dns-webhook
+    sources:
+    - https://github.com/RunnerM/simply-dns-webhook
     type: application
     urls:
     - https://runnerm.github.io/simply-dns-webhook/simply-dns-webhook-1.3.0.tgz
     version: 1.3.0
+  - apiVersion: v2
+    appVersion: 1.2.1
+    created: "2023-05-26T10:25:18.297194715+02:00"
+    description: A Helm chart for Simply.com dns01 challenge support for cert-manager.
+      Refer to https://github.com/RunnerM/simply-dns-webhook for documentation.
+    digest: b16d8e96dcccdfaef2f8aa53a184534528be58175b3d528c3defa2bf52ad45f2
+    home: https://runnerm.github.io/simply-dns-webhook/README.md
+    icon: https://user-images.githubusercontent.com/51089137/195098737-fc66a30f-6174-45ed-b995-3f2689dafd2e.png
+    maintainers:
+    - email: pentek.marci@gmail.com
+      name: runnerm
+      url: https://github.com/runnerm
+    name: simply-dns-webhook
+    sources:
+    - https://github.com/RunnerM/simply-dns-webhook
+    type: application
+    urls:
+    - https://runnerm.github.io/simply-dns-webhook/simply-dns-webhook-1.2.1.tgz
+    version: 1.2.1
   - apiVersion: v2
     appVersion: 1.2.0
     created: "2023-04-05T12:57:09.492649921+02:00"
@@ -118,4 +144,4 @@ entries:
     urls:
     - https://runnerm.github.io/simply-dns-webhook/simply-dns-webhook-1.0.0.tgz
     version: 1.0.0
-generated: "2023-05-25T22:38:52.871489938+02:00"
+generated: "2023-05-26T10:25:18.294959437+02:00"
