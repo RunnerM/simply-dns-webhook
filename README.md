@@ -1,4 +1,3 @@
-
 <p align="center">
   <img src="https://user-images.githubusercontent.com/51089137/193522982-c0792104-7ecd-4e6c-a4a9-56b066b65331.png" height="156" width="312" alt="logo" />
 </p>
@@ -129,7 +128,7 @@ The following table lists the configurable parameters of the simply-dns-webhook 
 | `certManager.namespace`          | cert-manager namespace                          | `cert-manager`                                   |
 | `certManager.serviceAccountName` | cert-manager service account name               | `cert-manager`                                   |
 | `image.repository`               | Docker image repository                         | `deyaeddin/cert-manager-webhook-hetzner`         |
-| `image.tag`                      | Docker image tag                                | `v1.2.0`                                         |
+| `image.tag`                      | Docker image tag                                | `v1.2.1`                                         |
 | `image.pullPolicy`               | Docker image pull policy                        | `IfNotPresent`                                   |
 | `nameOverride`                   | Name override for the chart                     | `""`                                             |
 | `fullnameOverride`               | Full name override for the chart                | `""`                                             |
