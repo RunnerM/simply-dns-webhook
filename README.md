@@ -14,6 +14,7 @@ The version compatibility I have tested for can be seen below:
 | `1.9.x`              | `1.0.x`                    |
 | `1.10.x`             | `1.1.x`                    |
 | `1.11.x`             | `1.2.x`                    |
+| `1.12.x`             | `1.3.x`                    |
 
 
 
@@ -25,13 +26,13 @@ Add repo:
 ```
 Then:
 ```shell
-    helm install my-simply-dns-webhook simply-dns-webhook/simply-dns-webhook --version 1.2.1
+    helm install my-simply-dns-webhook simply-dns-webhook/simply-dns-webhook --version 1.3.0
 ```
 #### As sub-chart:
 ```YAML
     dependencies:
         - name: simply-dns-webhook
-          version: 1.2.1
+          version: 1.3.0
           repository: https://runnerm.github.io/simply-dns-webhook/
           alias: simply-dns-webhook
 ```

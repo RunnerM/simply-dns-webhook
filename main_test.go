@@ -1,10 +1,10 @@
 package main
 
 import (
-	"github.com/cert-manager/cert-manager/test/acme/dns"
+	dns "github.com/cert-manager/cert-manager/test/acme"
 	"os"
-    //"reflect"
-    "testing"
+	//"reflect"
+	"testing"
 	"time"
 )
 
