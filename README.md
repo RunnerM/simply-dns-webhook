@@ -2,9 +2,19 @@
   <img src="https://user-images.githubusercontent.com/51089137/193522982-c0792104-7ecd-4e6c-a4a9-56b066b65331.png" height="156" width="312" alt="logo" />
 </p>
 
+<div align="center">
 
-# Simply DNS webhook service for cert-manager support     [![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/simply-dns-webhook)](https://artifacthub.io/packages/search?repo=simply-dns-webhook)
-This service can be installed side by side with cert manager and can be used to handle dns-01 challeneges provided by cert manager. All documentation on how to configure dns-01 chalanges can be found at [cert-manager.io](https://cert-manager.io/docs/configuration/acme/dns01/webhook/)
+# Simply DNS webhook service for cert-manager support
+  
+</div>
+
+<div align="center">
+  
+[![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/simply-dns-webhook)](https://artifacthub.io/packages/search?repo=simply-dns-webhook) ![GitHub](https://img.shields.io/github/license/runnerm/simply-dns-webhook) ![GitHub go.mod Go version](https://img.shields.io/github/go-mod/go-version/runnerm/simply-dns-webhook) ![GitHub Repo stars](https://img.shields.io/github/stars/runnerm/simply-dns-webhook)
+
+</div>
+
+This service can be installed side by side with cert manager and can be used to handle dns-01 challeneges provided by cert manager. All documentation on how to configure dns-01 chalanges can be found at  [cert-manager.io](https://cert-manager.io/docs/configuration/acme/dns01/webhook/)
 
 ### Version support:
 The version compatibility I have tested for can be seen below:
