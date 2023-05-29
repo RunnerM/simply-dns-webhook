@@ -6,7 +6,7 @@ replace github.com/cert-manager/cert-manager => github.com/cert-manager/cert-man
 
 require (
 	github.com/cert-manager/cert-manager v1.11.0
-	github.com/runnerm/simply-com-client v0.0.0-20230529101127-b56ab8e417e7
+	github.com/runnerm/simply-com-client v0.1.0
 	k8s.io/apiextensions-apiserver v0.26.0
 	k8s.io/apimachinery v0.26.0
 	k8s.io/client-go v0.26.0
