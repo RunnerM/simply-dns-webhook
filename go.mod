@@ -4,7 +4,7 @@ go 1.20
 
 require (
 	github.com/bobesa/go-domain-util v0.0.0-20190911083921-4033b5f7dd89
-	github.com/cert-manager/cert-manager v1.12.1
+	github.com/cert-manager/cert-manager v1.12.2
 	k8s.io/apiextensions-apiserver v0.27.2
 	k8s.io/apimachinery v0.27.2
 	k8s.io/client-go v0.27.2
