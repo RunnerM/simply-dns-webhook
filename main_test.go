@@ -1,7 +1,7 @@
 package main
 
 import (
-	dns "github.com/cert-manager/cert-manager/test/acme"
+	"github.com/cert-manager/cert-manager/test/acme/dns"
 	"os"
 	//"reflect"
 	"testing"
