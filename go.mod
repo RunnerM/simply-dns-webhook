@@ -6,7 +6,7 @@ require (
 	github.com/cert-manager/cert-manager v1.12.2
 	github.com/runnerm/simply-com-client v0.1.0
 	k8s.io/apiextensions-apiserver v0.27.3
-	k8s.io/apimachinery v0.27.3
+	k8s.io/apimachinery v0.27.4
 	k8s.io/client-go v0.27.3
 )
 
