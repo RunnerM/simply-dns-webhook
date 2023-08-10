@@ -2,9 +2,19 @@
   <img src="https://user-images.githubusercontent.com/51089137/193522982-c0792104-7ecd-4e6c-a4a9-56b066b65331.png" height="156" width="312" alt="logo" />
 </p>
 
+<div align="center">
 
-# Simply DNS webhook service for cert-manager support     [![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/simply-dns-webhook)](https://artifacthub.io/packages/search?repo=simply-dns-webhook)
-This service can be installed side by side with cert manager and can be used to handle dns-01 challeneges provided by cert manager. All documentation on how to configure dns-01 chalanges can be found at [cert-manager.io](https://cert-manager.io/docs/configuration/acme/dns01/webhook/)
+# Simply DNS webhook service for cert-manager support
+  
+</div>
+
+<div align="center">
+  
+[![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/simply-dns-webhook)](https://artifacthub.io/packages/search?repo=simply-dns-webhook) ![GitHub](https://img.shields.io/github/license/runnerm/simply-dns-webhook) ![GitHub go.mod Go version](https://img.shields.io/github/go-mod/go-version/runnerm/simply-dns-webhook) [![Go Report Card](https://goreportcard.com/badge/github.com/runnerm/simply-dns-webhook)](https://goreportcard.com/report/github.com/runnerm/simply-dns-webhook) ![GitHub Repo stars](https://img.shields.io/github/stars/runnerm/simply-dns-webhook)
+
+</div>
+
+This service can be installed side by side with cert manager and can be used to handle dns-01 challeneges provided by cert manager. All documentation on how to configure dns-01 chalanges can be found at  [cert-manager.io](https://cert-manager.io/docs/configuration/acme/dns01/webhook/)
 
 ### Version support:
 The version compatibility I have tested for can be seen below:
@@ -110,6 +120,14 @@ I leave the choice of the resource constraints to you since you know what you ru
                 memory: 128Mi
 ```
 
+### Logging:
+You may choose to elevate level logging to debug by setting the following values:
+```YAML
+    simply-dns-webhook:
+        logLevel: DEBUG
+```
+Debug level gives you a bit more context when debugging your setup. Default log level is INFO.
+
 ### Running the test suite:
 
 Update the [config](testdata/simply-dns-webhook/config.json) or the [simply-credentials](testdata/simply-dns-webhook/simply-credentials.yaml) secret with your API credentials and run:
@@ -122,21 +140,22 @@ $ TEST_ZONE_NAME=example.com. make test
 
 The following table lists the configurable parameters of the simply-dns-webhook chart, and their default values.
 
-| Parameter                        | Description                                     | Default                                          |
-|----------------------------------|-------------------------------------------------|--------------------------------------------------|
-| `groupName`                      | Group name for the webhook                      | `com.github.runnerm.cert-manager-simply-webhook` |
-| `certManager.namespace`          | cert-manager namespace                          | `cert-manager`                                   |
-| `certManager.serviceAccountName` | cert-manager service account name               | `cert-manager`                                   |
-| `image.repository`               | Docker image repository                         | `deyaeddin/cert-manager-webhook-hetzner`         |
-| `image.tag`                      | Docker image tag                                | `v1.3.1`                                         |
-| `image.pullPolicy`               | Docker image pull policy                        | `IfNotPresent`                                   |
-| `nameOverride`                   | Name override for the chart                     | `""`                                             |
-| `fullnameOverride`               | Full name override for the chart                | `""`                                             |
-| `service.type`                   | Service type                                    | `ClusterIP`                                      |
-| `service.port`                   | Service port                                    | `443`                                            |
-| `resources`                      | Pod resources                                   | Check `values.yaml` file                         |
-| `nodeSelector`                   | Node selector                                   | `nil`                                            |
-| `tolerations`                    | Node toleration                                 | `nil`                                            |
-| `affinity`                       | Node affinity                                   | `nil`                                            |
+| Parameter                        | Description                       | Default                                          |
+|----------------------------------|-----------------------------------|--------------------------------------------------|
+| `groupName`                      | Group name for the webhook        | `com.github.runnerm.cert-manager-simply-webhook` |
+| `debugLevel`                     | Logging level                     | `INFO`                                           |
+| `certManager.namespace`          | cert-manager namespace            | `cert-manager`                                   |
+| `certManager.serviceAccountName` | cert-manager service account name | `cert-manager`                                   |
+| `image.repository`               | Docker image repository           | `deyaeddin/cert-manager-webhook-hetzner`         |
+| `image.tag`                      | Docker image tag                  | `v1.3.2`                                         |
+| `image.pullPolicy`               | Docker image pull policy          | `IfNotPresent`                                   |
+| `nameOverride`                   | Name override for the chart       | `""`                                             |
+| `fullnameOverride`               | Full name override for the chart  | `""`                                             |
+| `service.type`                   | Service type                      | `ClusterIP`                                      |
+| `service.port`                   | Service port                      | `443`                                            |
+| `resources`                      | Pod resources                     | Check `values.yaml` file                         |
+| `nodeSelector`                   | Node selector                     | `nil`                                            |
+| `tolerations`                    | Node toleration                   | `nil`                                            |
+| `affinity`                       | Node affinity                     | `nil`                                            |
 
 ##### Special credits to: **Keyhole Aps**

@@ -9,6 +9,7 @@ OUT := $(shell pwd)/_out
 
 KUBE_VERSION=1.25.0
 
+
 $(shell mkdir -p "$(OUT)")
 export TEST_ASSET_ETCD=_test/kubebuilder/etcd
 export TEST_ASSET_KUBE_APISERVER=_test/kubebuilder/kube-apiserver
