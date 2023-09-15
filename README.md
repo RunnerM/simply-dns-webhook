@@ -25,6 +25,8 @@ The version compatibility I have tested for can be seen below:
 | `1.10.x`             | `1.1.x`                    |
 | `1.11.x`             | `1.2.x`                    |
 | `1.12.x`             | `1.3.x`                    |
+| `1.13.x`             | `1.4.x`                    |
+
 
 
 
@@ -147,7 +149,7 @@ The following table lists the configurable parameters of the simply-dns-webhook 
 | `certManager.namespace`          | cert-manager namespace            | `cert-manager`                                   |
 | `certManager.serviceAccountName` | cert-manager service account name | `cert-manager`                                   |
 | `image.repository`               | Docker image repository           | `deyaeddin/cert-manager-webhook-hetzner`         |
-| `image.tag`                      | Docker image tag                  | `v1.3.2`                                         |
+| `image.tag`                      | Docker image tag                  | `v1.4.0`                                         |
 | `image.pullPolicy`               | Docker image pull policy          | `IfNotPresent`                                   |
 | `nameOverride`                   | Name override for the chart       | `""`                                             |
 | `fullnameOverride`               | Full name override for the chart  | `""`                                             |
