@@ -18,12 +18,10 @@ jobs:
 
         - name: Edit config
           env:
-            ACCOUNT_NAME: ${{ secrets.SIMPLY_ACCOUNT_NAME }}
-            API_KEY: ${{ secrets.SIMPLY_API_KEY }}
-            TEST_ZONE_NAME: ${{ secrets.TEST_ZONE_NAME }}
+            CONFIG_JSON: ${{ secrets.CONFIG_JSON }}
           run: | 
             cd testdata/simply-dns-webhook
-            echo '{ "secretName": "simply-credentials", "accountName": "'$SIMPLY_ACCOUNT_NAME'", "apiKey": "'$SIMPLY_API_KEY'" }' > config.json
+            echo $CONFIG_JSON  > config.json
             cd ../..
 
         - name: Run tests
