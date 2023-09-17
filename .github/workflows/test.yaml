@@ -25,5 +25,10 @@ jobs:
             cd testdata/simply-dns-webhook
             echo '{ "secretName": "simply-credentials", "accountName": "'$SIMPLY_ACCOUNT_NAME'", "apiKey": "'$SIMPLY_API_KEY'" }' > config.json
             cd ../..
-            make test
+
+        - name: Run tests
+          env:
+            TEST_ZONE_NAME: ${{ secrets.TEST_ZONE_NAME }}
+          run: |
+              make test
 
