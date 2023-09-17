@@ -1,0 +1,29 @@
+name: Test
+
+on:
+  push:
+    branches: [ "master" , "feature/**" ]
+    # Publish semver tags as releases.
+    tags: [ 'v*.*.*' ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+    test:
+        runs-on: ubuntu-latest
+
+        steps:
+        - name: Checkout repository
+          uses: actions/checkout@v3
+
+        - name: Edit config
+          env:
+            ACCOUNT_NAME: ${{ secrets.SIMPLY_ACCOUNT_NAME }}
+            API_KEY: ${{ secrets.SIMPLY_API_KEY }}
+            TEST_ZONE_NAME: ${{ secrets.TEST_ZONE_NAME }}
+          run: | 
+            cd testdata/simply-dns-webhook
+            echo '{ "secretName": "simply-credentials", "accountName": "'$SIMPLY_ACCOUNT_NAME'", "apiKey": "'$SIMPLY_API_KEY'" }' > config.json
+            cd ../..
+            make test
+
