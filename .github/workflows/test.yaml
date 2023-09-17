@@ -1,0 +1,32 @@
+name: Test
+
+on:
+  push:
+    branches: [ "master" , "feature/**" ]
+    # Publish semver tags as releases.
+    tags: [ 'v*.*.*' ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+    test:
+        runs-on: ubuntu-latest
+
+        steps:
+        - name: Checkout repository
+          uses: actions/checkout@v3
+
+        - name: Edit config
+          env:
+            CONFIG_JSON: ${{ secrets.CONFIG_JSON }}
+          run: | 
+            cd testdata/simply-dns-webhook
+            echo $CONFIG_JSON  > config.json
+            cd ../..
+
+        - name: Run tests
+          env:
+            TEST_ZONE_NAME: ${{ secrets.TEST_ZONE_NAME }}
+          run: |
+              make test
+
