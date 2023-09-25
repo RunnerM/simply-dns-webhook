@@ -10,9 +10,15 @@ fi
 IMAGE_TAG="v$VERSION"
 
 
-cd deploy
+cd deploy/simply-dns-webhook
+
+sed -i '/tag:/c\  tag: $IMAGE_TAG' values.yaml
+sed -i '/version: /c\version: $IMAGE_TAG' Chart.yaml
+sed -i '/appVersion: "/c\appVersion: "$IMAGE_TAG"' Chart.yaml
+
+cd ..
 helm lint simply-dns-webhook
-helm package simply-dns-webhook --version $VERSION --app-version $VERSION
+helm package simply-dns-webhook
 helm repo index . --url https://runnerm.github.io/simply-dns-webhook/
 
 git config --global user.email "ci-bot@runnerm.com"
