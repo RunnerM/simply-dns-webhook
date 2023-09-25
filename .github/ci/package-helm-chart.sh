@@ -12,9 +12,9 @@ IMAGE_TAG="v$VERSION"
 
 cd deploy/simply-dns-webhook
 
-sed -i '/tag:/c\  tag: $IMAGE_TAG' values.yaml
-sed -i '/version: /c\version: $IMAGE_TAG' Chart.yaml
-sed -i '/appVersion: "/c\appVersion: "$IMAGE_TAG"' Chart.yaml
+sed -i "/tag:/c\  tag: $IMAGE_TAG" values.yaml
+sed -i "/version: /c\version: $VERSION" Chart.yaml
+sed -i "/appVersion: /c\appVersion: '$VERSION'" Chart.yaml
 
 cd ..
 helm lint simply-dns-webhook
