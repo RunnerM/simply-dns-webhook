@@ -3,7 +3,7 @@ module github.com/runnerm/simply-dns-webhook
 go 1.20
 
 require (
-	github.com/cert-manager/cert-manager v1.13.0
+	github.com/cert-manager/cert-manager v1.13.1
 	github.com/runnerm/simply-com-client v1.0.0
 	github.com/sirupsen/logrus v1.9.3
 	k8s.io/apiextensions-apiserver v0.28.2
@@ -23,7 +23,7 @@ require (
 	github.com/coreos/go-semver v0.3.1 // indirect
 	github.com/coreos/go-systemd/v22 v22.5.0 // indirect
 	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc // indirect
-	github.com/emicklei/go-restful/v3 v3.10.2 // indirect
+	github.com/emicklei/go-restful/v3 v3.11.0 // indirect
 	github.com/evanphx/json-patch v5.6.0+incompatible // indirect
 	github.com/evanphx/json-patch/v5 v5.6.0 // indirect
 	github.com/felixge/httpsnoop v1.0.3 // indirect
