@@ -21,9 +21,9 @@ helm lint simply-dns-webhook
 helm package simply-dns-webhook
 helm repo index . --url https://runnerm.github.io/simply-dns-webhook/
 
-git config --global user.email "ci-bot@runnerm.com"
-git config --global user.name "simple-dns-webhook CI robot"
+git config --global user.email "ci-bot@pentek.dk"
+git config --global user.name "runnnerm-ci-bot"
 
 git add --all
-git commit -m "Chore: Update helm chart for version $VERSION"
+git commit -m "Chore: Update helm chart for version $VERSION" -m "[skip ci]"
 git push
