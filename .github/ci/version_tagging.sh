@@ -14,8 +14,8 @@ if git rev-parse "$TAG" >/dev/null 2>&1; then
   exit 1
 fi
 
-git config --global user.email "ci-bot@runnerm.com"
-git config --global user.name "simple-dns-webhook CI robot"
+git config --global user.email "ci-bot@pentek.dk"
+git config --global user.name "runnerm-ci-bot"
 
 git tag "$TAG"
 git push origin "$TAG"
