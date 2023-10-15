@@ -31,7 +31,7 @@ jobs:
             configFilePath: GitVersion.yml
 
         - name: Assemble Helm Chart
-          run: .github/ci/package-helm-chart.sh ${{ env.semVer }}
+          run: .github/ci/package-helm-chart.sh ${{ env.GitVersion_SemVer }}
 
         - name: Tag Version and Push
-          run: .github/ci/version-tagging.sh ${{ env.semVer }}
+          run: .github/ci/version-tagging.sh ${{ env.GitVersion_SemVer }}
