@@ -7,9 +7,9 @@ name: Docker
 
 on:
   push:
-    branches: [ "master" , "feature/**" ]
+    branches: [ "master" ]
     # Publish semver tags as releases.
-    tags: [ 'v*.*.*' ]
+    tags: [ '*' ]
   pull_request:
     branches: [ "master" ]
 
@@ -33,7 +33,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       # Install the cosign tool except on PR
       # https://github.com/sigstore/cosign-installer

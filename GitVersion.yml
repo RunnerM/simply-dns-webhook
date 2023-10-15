@@ -1,10 +1,10 @@
 mode: ContinuousDelivery
 tag-prefix: '[vV]'
 continuous-delivery-fallback-tag: ci
-major-version-bump-message: '\+semver:\s?(breaking|major)'
-minor-version-bump-message: '\+semver:\s?(feature|minor)'
-patch-version-bump-message: '\+semver:\s?(fix|patch)'
-no-bump-message: '\+semver:\s?(none|skip)'
+major-version-bump-message: '\s?(breaking|major)'
+minor-version-bump-message: '\s?(feature|minor)'
+patch-version-bump-message: '\s?(fix|patch)'
+no-bump-message: '\s?(none|skip)'
 commit-message-incrementing: MergeMessageOnly
 branches:
   develop:
@@ -22,7 +22,7 @@ branches:
   main:
     mode: ContinuousDelivery
     tag: ''
-    increment: None
+    #increment: None
     prevent-increment-of-merged-branch-version: true
     track-merge-target: false
     regex: ^master$|^main$
@@ -37,3 +37,4 @@ ignore:
   sha: []
 increment: Inherit
 merge-message-formats: {}
+
