@@ -3,9 +3,11 @@ name: Versioning
 on:
   push:
     branches: [ "master" ]
+    paths-ignore:
+      - 'deploy/**'
 
 jobs:
-    create-tag:
+    versioning:
 
       runs-on: ubuntu-latest
       #permisions to commit to repo
@@ -15,9 +17,10 @@ jobs:
       steps:
 
         - name: Checkout
-          uses: actions/checkout@v2
+          uses: actions/checkout@v4
           with:
-            fetch-depth: 0
+            fetch-depth: '0'
+            token: ${{ secrets.PAT }}
 
         - name: Install GitVersion
           uses: gittools/actions/gitversion/setup@v0
@@ -31,7 +34,4 @@ jobs:
             configFilePath: GitVersion.yml
 
         - name: Assemble Helm Chart
-          run: .github/ci/package-helm-chart.sh ${{ env.semVer }}
-
-        - name: Tag Version and Push
-          run: .github/ci/version-tagging.sh ${{ env.semVer }}
+          run: .github/ci/package-helm-chart.sh ${{ env.GitVersion_SemVer }}
