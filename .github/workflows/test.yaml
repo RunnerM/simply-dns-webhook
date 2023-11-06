@@ -4,6 +4,8 @@ on:
   pull_request:
     branches: [ "master" ]
 
+concurrency: test_action_group
+
 jobs:
     test:
         runs-on: ubuntu-latest
