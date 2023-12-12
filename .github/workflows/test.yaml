@@ -1,12 +1,10 @@
 name: Test
 
 on:
-  push:
-    branches: [ "master" , "feature/**" ]
-    # Publish semver tags as releases.
-    tags: [ 'v*.*.*' ]
   pull_request:
     branches: [ "master" ]
+
+concurrency: test_action_group
 
 jobs:
     test:
