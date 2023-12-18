@@ -27,4 +27,8 @@ jobs:
             TEST_ZONE_NAME: ${{ secrets.TEST_ZONE_NAME }}
           run: |
               make test
+        - name: Codecov
+          uses: codecov/codecov-action@v3
+          env:
+            CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
