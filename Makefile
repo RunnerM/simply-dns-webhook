@@ -16,7 +16,7 @@ export TEST_ASSET_KUBE_APISERVER=_test/kubebuilder/kube-apiserver
 export TEST_ASSET_KUBECTL=_test/kubebuilder/kubectl
 
 test: _test/kubebuilder
-	$(GO) test -v .
+	$(GO) test -v -race -coverprofile=coverage.txt -covermode=atomic .
 
 _test/kubebuilder:
 	curl -fsSL https://go.kubebuilder.io/test-tools/$(KUBE_VERSION)/$(OS)/$(ARCH) -o kubebuilder-tools.tar.gz
