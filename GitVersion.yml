@@ -5,7 +5,7 @@ major-version-bump-message: '\s?(breaking|major)'
 minor-version-bump-message: '\s?(feature|minor)'
 patch-version-bump-message: '\s?(fix|patch)'
 no-bump-message: '\s?(none|skip)'
-commit-message-incrementing: MergeMessageOnly
+commit-message-incrementing: Enabled
 branches:
   develop:
     mode: ContinuousDeployment

@@ -10,7 +10,7 @@
 
 <div align="center">
   
-[![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/simply-dns-webhook)](https://artifacthub.io/packages/search?repo=simply-dns-webhook) ![GitHub](https://img.shields.io/github/license/runnerm/simply-dns-webhook) ![GitHub go.mod Go version](https://img.shields.io/github/go-mod/go-version/runnerm/simply-dns-webhook) [![Go Report Card](https://goreportcard.com/badge/github.com/runnerm/simply-dns-webhook)](https://goreportcard.com/report/github.com/runnerm/simply-dns-webhook) ![GitHub Repo stars](https://img.shields.io/github/stars/runnerm/simply-dns-webhook)
+[![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/simply-dns-webhook)](https://artifacthub.io/packages/search?repo=simply-dns-webhook) ![GitHub](https://img.shields.io/github/license/runnerm/simply-dns-webhook) ![GitHub go.mod Go version](https://img.shields.io/github/go-mod/go-version/runnerm/simply-dns-webhook) [![Go Report Card](https://goreportcard.com/badge/github.com/runnerm/simply-dns-webhook)](https://goreportcard.com/report/github.com/runnerm/simply-dns-webhook) [![codecov](https://codecov.io/gh/RunnerM/simply-dns-webhook/graph/badge.svg?token=O7YKKBP0IO)](https://codecov.io/gh/RunnerM/simply-dns-webhook) ![GitHub Repo stars](https://img.shields.io/github/stars/runnerm/simply-dns-webhook)
 
 </div>
 
@@ -26,9 +26,10 @@ The version compatibility I have tested for can be seen below:
 | `1.11.x`             | `1.2.x`                    |
 | `1.12.x`             | `1.3.x`                    |
 | `1.13.x`             | `1.4.x`                    |
+| `1.14.x`             | `1.5.x`                    |
 
-
-
+### Platfom support:
+The folowing architectures are supported by `1.14.x` and newer: `linux/amd64`, `linux/arm64`, `linux/arm`, `linux/arm/v6`, `linux/386` 
 
 ### Deploy
 #### Helm chart: 
