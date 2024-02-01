@@ -29,7 +29,7 @@ The version compatibility I have tested for can be seen below:
 | `1.14.x`             | `1.5.x`                    |
 
 ### Platfom support:
-The folowing architectures are supported by `1.14.x` and newer: `linux/amd64`, `linux/arm64`, `linux/arm`, `linux/arm/v6`, `linux/386`
+The folowing architectures are supported by `1.14.x` and newer: `linux/amd64`, `linux/arm64`, `linux/arm`, `linux/arm/v6`, `linux/386` 
 
 ### Deploy
 #### Helm chart: 
