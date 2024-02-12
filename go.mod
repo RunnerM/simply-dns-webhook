@@ -3,7 +3,7 @@ module github.com/runnerm/simply-dns-webhook
 go 1.20
 
 require (
-	github.com/cert-manager/cert-manager v1.14.1
+	github.com/cert-manager/cert-manager v1.14.2
 	github.com/runnerm/simply-com-client v1.0.0
 	github.com/sirupsen/logrus v1.9.3
 	k8s.io/apiextensions-apiserver v0.29.1
