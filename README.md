@@ -10,7 +10,7 @@
 
 <div align="center">
   
-[![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/simply-dns-webhook)](https://artifacthub.io/packages/search?repo=simply-dns-webhook) ![GitHub](https://img.shields.io/github/license/runnerm/simply-dns-webhook) ![GitHub go.mod Go version](https://img.shields.io/github/go-mod/go-version/runnerm/simply-dns-webhook) [![Go Report Card](https://goreportcard.com/badge/github.com/runnerm/simply-dns-webhook)](https://goreportcard.com/report/github.com/runnerm/simply-dns-webhook) [![codecov](https://codecov.io/gh/RunnerM/simply-dns-webhook/graph/badge.svg?token=O7YKKBP0IO)](https://codecov.io/gh/RunnerM/simply-dns-webhook) ![GitHub Repo stars](https://img.shields.io/github/stars/runnerm/simply-dns-webhook)
+[![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/simply-dns-webhook)](https://artifacthub.io/packages/search?repo=simply-dns-webhook) ![GitHub](https://img.shields.io/github/license/runnerm/simply-dns-webhook) ![GitHub go.mod Go version](https://img.shields.io/github/go-mod/go-version/runnerm/simply-dns-webhook) [![Go Report Card](https://goreportcard.com/badge/github.com/runnerm/simply-dns-webhook)](https://goreportcard.com/report/github.com/runnerm/simply-dns-webhook) [![codecov](https://codecov.io/gh/RunnerM/simply-dns-webhook/graph/badge.svg?token=O7YKKBP0IO)](https://codecov.io/gh/RunnerM/simply-dns-webhook) ![GitHub Repo stars](https://img.shields.io/github/stars/runnerm/simply-dns-webhook) ![Image pulls](https://img.shields.io/badge/Image%20pulls-70K<-brightgreen)
 
 </div>
 
