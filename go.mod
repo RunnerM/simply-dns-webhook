@@ -2,8 +2,6 @@ module github.com/runnerm/simply-dns-webhook
 
 go 1.21
 
-toolchain go1.21.7
-
 require (
 	github.com/cert-manager/cert-manager v1.14.3
 	github.com/runnerm/simply-com-client v1.0.0
