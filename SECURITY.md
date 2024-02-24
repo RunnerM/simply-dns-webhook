@@ -10,9 +10,9 @@ Officially built and supported by me:
 
 | Version | Supported          |
 |---------| ------------------ |
+| 1.5.x   | :white_check_mark: |
 | 1.4.x   | :white_check_mark: |
-| 1.3.x   | :white_check_mark: |
-| < 1.2.x | :x:                |
+| < 1.3.x | :x:                |
 
 ## Reporting a Vulnerability
 
