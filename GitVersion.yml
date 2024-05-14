@@ -1,9 +1,9 @@
 mode: ContinuousDelivery
 tag-prefix: '[vV]'
 continuous-delivery-fallback-tag: ci
-major-version-bump-message: '\s?(breaking|major)'
-minor-version-bump-message: '\s?(feature|minor)'
-patch-version-bump-message: '\s?(fix|patch)'
+major-version-bump-message: '\+webhook-semver:\s?(breaking|major)'
+minor-version-bump-message: '\+webhook-semver:\s?(feature|minor)'
+patch-version-bump-message: '\+webhook-semver:\s?(fix|patch)'
 no-bump-message: '\s?(none|skip)'
 commit-message-incrementing: Enabled
 branches:
