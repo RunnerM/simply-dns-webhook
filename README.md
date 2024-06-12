@@ -27,6 +27,7 @@ The version compatibility I have tested for can be seen below:
 | `1.12.x`             | `1.3.x`                    |
 | `1.13.x`             | `1.4.x`                    |
 | `1.14.x`             | `1.5.x`                    |
+| `1.15.x`             | `1.6.x`                    |
 
 ### Platfom support:
 The folowing architectures are supported by `1.14.x` and newer: `linux/amd64`, `linux/arm64`, `linux/arm`, `linux/arm/v6`, `linux/386` 
