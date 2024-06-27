@@ -162,4 +162,4 @@ The following table lists the configurable parameters of the simply-dns-webhook 
 | `tolerations`                    | Node toleration                   | `nil`                                            |
 | `affinity`                       | Node affinity                     | `nil`                                            |
 
-##### Special credits to: **Keyhole Aps**
+##### Special credits to: **Keyhole Aps** 
