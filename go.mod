@@ -5,7 +5,7 @@ go 1.22.0
 toolchain go1.22.2
 
 require (
-	github.com/cert-manager/cert-manager v1.16.1
+	github.com/cert-manager/cert-manager v1.16.2
 	github.com/runnerm/simply-com-client v1.0.1
 	github.com/sirupsen/logrus v1.9.3
 	k8s.io/apiextensions-apiserver v0.31.1
