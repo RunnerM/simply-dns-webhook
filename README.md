@@ -140,7 +140,7 @@ Update the [config](testdata/simply-dns-webhook/config.json) or the [simply-cred
 $ TEST_ZONE_NAME=example.com. make test
 ```
 
-## Parameters
+## Parameters 
 
 The following table lists the configurable parameters of the simply-dns-webhook chart, and their default values.
 
@@ -162,4 +162,4 @@ The following table lists the configurable parameters of the simply-dns-webhook 
 | `tolerations`                    | Node toleration                   | `nil`                                            |
 | `affinity`                       | Node affinity                     | `nil`                                            |
 
-##### Special credits to: **Keyhole Aps**
+##### Special credits to: **Keyhole Aps** 
