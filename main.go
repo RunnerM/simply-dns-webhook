@@ -4,16 +4,17 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"os"
+	"time"
+
 	"github.com/cert-manager/cert-manager/pkg/acme/webhook/apis/acme/v1alpha1"
 	"github.com/cert-manager/cert-manager/pkg/acme/webhook/cmd"
-	"github.com/runnerm/simply-com-client"
+	simplyComClient "github.com/runnerm/simply-com-client"
 	log "github.com/sirupsen/logrus"
 	extapi "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
-	"os"
-	"time"
 )
 
 var GroupName = os.Getenv("GROUP_NAME")
@@ -94,12 +95,12 @@ func (e *SimplyDnsSolver) CleanUp(ch *v1alpha1.ChallengeRequest) error {
 	}
 	id, _, err := e.client.GetRecord(ch.ResolvedFQDN, ch.Key, "TXT")
 	if err != nil {
-		log.Errorf("error on fetching record: %v", err)
-		return err
+		log.Errorf("Record not present have been cleaned up: %v", err)
+		return nil
 	}
-	log.Debug("Record(", id, ") fetched for cleanup.")
+	log.Info("Record(", id, ") fetched for cleanup.")
 	res := e.client.RemoveRecord(id, ch.ResolvedFQDN)
-	if res == true {
+	if res {
 		log.Debug("Record(", id, ") have been cleaned up.")
 		return nil
 	} else {
@@ -172,7 +173,7 @@ func loadCredentials(ch *v1alpha1.ChallengeRequest, e *SimplyDnsSolver) error {
 			return err
 		}
 
-		accountName, err := stringFromSecretData(&sec.Data, "account-name")
+		accountName, _ := stringFromSecretData(&sec.Data, "account-name")
 		apiKey, err := stringFromSecretData(&sec.Data, "api-key")
 		if err != nil {
 			log.Errorf("error on reading secret: %v", err)
