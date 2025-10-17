@@ -14,7 +14,7 @@
 
 </div>
 
-This service can be installed side by side with cert manager and can be used to handle dns-01 challeneges provided by cert manager. All documentation on how to configure dns-01 chalanges can be found at  [cert-manager.io](https://cert-manager.io/docs/configuration/acme/dns01/webhook/)
+This service can be installed side by side with cert manager and can be used to handle dns-01 challenges provided by cert manager. All documentation on how to configure dns-01 challenges can be found at  [cert-manager.io](https://cert-manager.io/docs/configuration/acme/dns01/webhook/)
 
 ### Version support:
 The version compatibility I have tested for can be seen below:
@@ -32,8 +32,8 @@ The version compatibility I have tested for can be seen below:
 | `1.17.x`             | `1.8.x`                    |
 | `1.18.x`             | `1.9.x`                    |
 
-### Platfom support:
-The folowing architectures are supported by `1.14.x` and newer: `linux/amd64`, `linux/arm64`, `linux/arm`, `linux/arm/v6`, `linux/386` 
+### Platform support:
+The following architectures are supported by `1.14.x` and newer: `linux/amd64`, `linux/arm64`, `linux/arm`, `linux/arm/v6`, `linux/386` 
 
 ### Deploy
 #### Helm chart: 
@@ -153,8 +153,8 @@ The following table lists the configurable parameters of the simply-dns-webhook 
 | `debugLevel`                     | Logging level                     | `INFO`                                           |
 | `certManager.namespace`          | cert-manager namespace            | `cert-manager`                                   |
 | `certManager.serviceAccountName` | cert-manager service account name | `cert-manager`                                   |
-| `image.repository`               | Docker image repository           | `deyaeddin/cert-manager-webhook-hetzner`         |
-| `image.tag`                      | Docker image tag                  | `v1.4.0`                                         |
+| `image.repository`               | Docker image repository           | `ghcr.io/runnerm/simply-dns-webhook`            |
+| `image.tag`                      | Docker image tag                  | `v1.9.0`                                         |
 | `image.pullPolicy`               | Docker image pull policy          | `IfNotPresent`                                   |
 | `nameOverride`                   | Name override for the chart       | `""`                                             |
 | `fullnameOverride`               | Full name override for the chart  | `""`                                             |

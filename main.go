@@ -69,10 +69,10 @@ func (e *SimplyDnsSolver) Present(ch *v1alpha1.ChallengeRequest) error {
 			log.Errorf("presenting challenge failed: %v", err)
 			return err
 		}
-		log.Debug("Challenge have been created with record id: ", id)
+		log.Debug("Challenge has been created with record id: ", id)
 		return nil
 	} else if fetchErr == nil && id != 0 && txtData == ch.Key {
-		log.Debug("Challenge have been created with record id: ", id)
+		log.Debug("Challenge has been created with record id: ", id)
 		return nil
 	} else {
 		id, err = e.client.AddRecord(ch.ResolvedFQDN, ch.Key, "TXT")
@@ -80,7 +80,7 @@ func (e *SimplyDnsSolver) Present(ch *v1alpha1.ChallengeRequest) error {
 			log.Errorf("presenting challenge failed: %v", err)
 			return err
 		} else {
-			log.Debug("Challenge have been created with record id: ", id)
+			log.Debug("Challenge has been created with record id: ", id)
 		}
 		return nil
 	}
@@ -95,17 +95,17 @@ func (e *SimplyDnsSolver) CleanUp(ch *v1alpha1.ChallengeRequest) error {
 	}
 	id, _, err := e.client.GetRecord(ch.ResolvedFQDN, ch.Key, "TXT")
 	if err != nil {
-		log.Errorf("Record not present have been cleaned up: %v", err)
+		log.Infof("Record not found for cleanup: %v", err)
 		return nil
 	}
 	log.Info("Record(", id, ") fetched for cleanup.")
 	res := e.client.RemoveRecord(id, ch.ResolvedFQDN)
 	if res {
-		log.Debug("Record(", id, ") have been cleaned up.")
+		log.Debug("Record(", id, ") has been cleaned up.")
 		return nil
 	} else {
-		log.Errorf("record(%d) have not been cleaned up", id)
-		return err
+		log.Errorf("record(%d) could not be cleaned up", id)
+		return errors.New("failed to remove DNS record")
 	}
 
 }
@@ -166,6 +166,9 @@ func loadCredentials(ch *v1alpha1.ChallengeRequest, e *SimplyDnsSolver) error {
 		return nil
 	} else {
 		secretName := cfg.SecretRef
+		if secretName == "" {
+			return errors.New("no secret name provided and no direct credentials in config")
+		}
 		log.Debug("Loading API credentials from secret: ", secretName)
 		sec, err := e.kubeClient.CoreV1().Secrets(ch.ResourceNamespace).Get(context.TODO(), secretName, metav1.GetOptions{})
 		if err != nil {
@@ -173,7 +176,11 @@ func loadCredentials(ch *v1alpha1.ChallengeRequest, e *SimplyDnsSolver) error {
 			return err
 		}
 
-		accountName, _ := stringFromSecretData(&sec.Data, "account-name")
+		accountName, err := stringFromSecretData(&sec.Data, "account-name")
+		if err != nil {
+			log.Errorf("error on reading secret: %v", err)
+			return err
+		}
 		apiKey, err := stringFromSecretData(&sec.Data, "api-key")
 		if err != nil {
 			log.Errorf("error on reading secret: %v", err)
