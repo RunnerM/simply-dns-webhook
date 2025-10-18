@@ -44,8 +44,8 @@ type SimplyDNSProviderConfig struct {
 	SecretRef   string `json:"secretName"`
 	AccountName string `json:"accountName"`
 	ApiKey      string `json:"apiKey"`
-	// --- [PATCH] Optional TTL settings ---
-	TTLSeconds  int	   `json:"ttl,omitempty"`
+	// PATCH: Optional TTL settings from Issuer/ClusterIssuer config
+	TTLSeconds  int	   `json:"ttlSeconds,omitempty"`
 }
 
 type SimplyDnsSolver struct {
@@ -58,36 +58,31 @@ func (e *SimplyDnsSolver) Name() string {
 }
 func (e *SimplyDnsSolver) Present(ch *v1alpha1.ChallengeRequest) error {
 	log.Info("Presenting challenge for: ", ch.ResolvedFQDN)
-
-	// --- [PATCH] Load webhook config for optional ttlSeconds ---
-	cfg, cfgErr := loadConfig(ch)
-	if cfgErr != nil {
-		log.Errorf("load config failed: %v", cfgErr)
-		return cfgErr
-	}
-
-	// --- [PATCH] TTL configuration (default 3600s, min 60s) ---
-	ttl := 3600
-	if cfg.TTLSeconds > 0 {
-		if cfg.TTLSeconds < 60 {
-			log.Errorf("ttlSeconds must be >= 60, got %d", cfg.TTLSeconds)
-			return errors.New("invalid ttlSeconds value")
-		}
-		ttl = cfg.TTLSeconds
-	}
-	// --- [END PATCH] ---
-
 	err := loadCredentials(ch, e)
 	if err != nil {
 		log.Errorf("load credentials failed(check secret configuration): %v", err)
 		return err
 	}
 
+	// PATCH: Load webhook config for optional ttlSeconds
+	cfg, cfgErr := loadConfig(ch.Config)
+	if cfgErr != nil {
+		log.Errorf("load config failed: %v", cfgErr)
+		return cfgErr
+	}
+	// PATCH TTL configuration (default 3600s, min 60s)
+	if cfg.TTLSeconds >= 60 {
+		e.client.DefaultTTL = cfg.TTLSeconds
+		log.Infof("Using custom TTL: %d seconds", e.client.DefaultTTL)
+	} else if cfg.TTLSeconds > 0 {
+		log.Warnf("Ignoring invalid ttlSeconds=%d (must be >=60)", cfg.TTLSeconds)
+	}
+	// END PATCH
+
+
 	id, txtData, fetchErr := e.client.GetRecord(ch.ResolvedFQDN, ch.Key, "TXT")
 	if fetchErr == nil && id != 0 && txtData != ch.Key {
-		// --- [PATCH] Pass ttl when updating record ---
-		_, err := e.client.UpdateRecord(id, ch.ResolvedFQDN, ch.Key, "TXT", ttl)
-		// --- [END PATCH] ---
+		_, err := e.client.UpdateRecord(id, ch.ResolvedFQDN, ch.Key, "TXT")
 		if err != nil {
 			log.Errorf("presenting challenge failed: %v", err)
 			return err
@@ -98,9 +93,7 @@ func (e *SimplyDnsSolver) Present(ch *v1alpha1.ChallengeRequest) error {
 		log.Debug("Challenge have been created with record id: ", id)
 		return nil
 	} else {
-		// --- [PATCH] Pass ttl when adding record ---
-		id, err = e.client.AddRecord(ch.ResolvedFQDN, ch.Key, "TXT", ttl)
-		// --- [END PATCH] ---
+		id, err = e.client.AddRecord(ch.ResolvedFQDN, ch.Key, "TXT")
 		if err != nil {
 			log.Errorf("presenting challenge failed: %v", err)
 			return err
