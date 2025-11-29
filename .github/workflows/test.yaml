@@ -19,7 +19,7 @@ jobs:
             CONFIG_JSON: ${{ secrets.CONFIG_JSON }}
           run: | 
             cd testdata/simply-dns-webhook
-            echo $CONFIG_JSON  > config.json
+            echo "$CONFIG_JSON"  > config.json
             cd ../..
 
         - name: Run tests
