@@ -44,6 +44,8 @@ type SimplyDNSProviderConfig struct {
 	SecretRef   string `json:"secretName"`
 	AccountName string `json:"accountName"`
 	ApiKey      string `json:"apiKey"`
+	// PATCH: Optional TTL settings from Issuer/ClusterIssuer config
+	TTLSeconds  int	   `json:"ttlSeconds,omitempty"`
 }
 
 type SimplyDnsSolver struct {
@@ -61,6 +63,22 @@ func (e *SimplyDnsSolver) Present(ch *v1alpha1.ChallengeRequest) error {
 		log.Errorf("load credentials failed(check secret configuration): %v", err)
 		return err
 	}
+
+	// PATCH: Load webhook config for optional ttlSeconds
+	cfg, cfgErr := loadConfig(ch.Config)
+	if cfgErr != nil {
+		log.Errorf("load config failed: %v", cfgErr)
+		return cfgErr
+	}
+	// PATCH TTL configuration (default 3600s, min 60s)
+	if cfg.TTLSeconds >= 60 {
+		e.client.DefaultTTL = cfg.TTLSeconds
+		log.Infof("Using custom TTL: %d seconds", e.client.DefaultTTL)
+	} else if cfg.TTLSeconds > 0 {
+		log.Warnf("Ignoring invalid ttlSeconds=%d (must be >=60)", cfg.TTLSeconds)
+	}
+	// END PATCH
+
 
 	id, txtData, fetchErr := e.client.GetRecord(ch.ResolvedFQDN, ch.Key, "TXT")
 	if fetchErr == nil && id != 0 && txtData != ch.Key {
