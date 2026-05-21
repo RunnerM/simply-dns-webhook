@@ -4,7 +4,7 @@ go 1.26.0
 
 require (
 	github.com/cert-manager/cert-manager v1.20.2
-	github.com/runnerm/simply-com-client v1.0.2
+	github.com/runnerm/simply-com-client v1.0.3
 	github.com/sirupsen/logrus v1.9.4
 	k8s.io/apiextensions-apiserver v0.36.0
 	k8s.io/apimachinery v0.36.1
