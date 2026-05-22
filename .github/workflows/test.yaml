@@ -2,7 +2,7 @@ name: Test
 
 on:
   pull_request:
-    branches: [ "master" ]
+    branches: [ "master", "develop" ]
 
 concurrency: test_action_group
 
@@ -19,7 +19,7 @@ jobs:
             CONFIG_JSON: ${{ secrets.CONFIG_JSON }}
           run: | 
             cd testdata/simply-dns-webhook
-            echo $CONFIG_JSON  > config.json
+            echo "$CONFIG_JSON"  > config.json
             cd ../..
 
         - name: Run tests
