@@ -4,7 +4,7 @@ go 1.26.0
 
 require (
 	github.com/cert-manager/cert-manager v1.21.1
-	github.com/runnerm/simply-com-client v1.0.3
+	github.com/runnerm/simply-com-client v1.0.4
 	github.com/sirupsen/logrus v1.9.4
 	k8s.io/apiextensions-apiserver v0.36.3
 	k8s.io/apimachinery v0.36.3
@@ -17,7 +17,6 @@ require (
 	github.com/antlr4-go/antlr/v4 v4.13.1 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/blang/semver/v4 v4.0.0 // indirect
-	github.com/bobesa/go-domain-util v0.0.0-20190911083921-4033b5f7dd89 // indirect
 	github.com/cenkalti/backoff/v5 v5.0.3 // indirect
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
 	github.com/coreos/go-semver v0.3.1 // indirect
