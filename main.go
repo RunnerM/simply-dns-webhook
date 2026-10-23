@@ -169,7 +169,7 @@ func stringFromSecretData(secretData *map[string][]byte, key string) (string, er
 }
 
 func loadCredentials(ch *v1alpha1.ChallengeRequest, e *SimplyDnsSolver) error {
-	if e.client.Credentials.AccountName != "" && e.client.Credentials.ApiKey != "" {
+	if e.client.Credentials.ApiKey != "" {
 		return nil
 	}
 
@@ -178,7 +178,7 @@ func loadCredentials(ch *v1alpha1.ChallengeRequest, e *SimplyDnsSolver) error {
 		log.Errorf("error on loading config: %v", err)
 		return err
 	}
-	if cfg.AccountName != "" && cfg.ApiKey != "" {
+	if cfg.ApiKey != "" {
 		log.Debug("Loading API credentials from config.")
 		e.client = simplyComClient.CreateSimplyClient(cfg.AccountName, cfg.ApiKey)
 		return nil
@@ -191,7 +191,7 @@ func loadCredentials(ch *v1alpha1.ChallengeRequest, e *SimplyDnsSolver) error {
 			return err
 		}
 
-		accountName, _ := stringFromSecretData(&sec.Data, "account-name")
+		accountName := string(sec.Data["account-name"])
 		apiKey, err := stringFromSecretData(&sec.Data, "api-key")
 		if err != nil {
 			log.Errorf("error on reading secret: %v", err)
