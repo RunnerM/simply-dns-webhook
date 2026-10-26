@@ -59,7 +59,8 @@ Then:
 **Credentials secret:**
 You have to create the secret containing your simply.com api credential on your own, and 
 it's name has to match with the secret ref name provided in the config of the cert-manager
-issuer/cluster issuer.
+issuer/cluster issuer. Only the `api-key` is needed, as described in the [Simply.com API docs](https://www.simply.com/en/docs/api/).
+The `account-name` key (and `accountName` in the config) is no longer used and can be left out.
 
 
 #### Issuer/ClusterIssuer:
@@ -91,7 +92,6 @@ You may choose to use the webhook configuration directly as shown below.
 **_(use it at your own risk)_**
 ```diff
 -              secretName: simply-credentials # notice the name
-+              accountName: "<account-name>"
 +              apiKey: "<api-key>"
 ```
 #### Secret
@@ -99,7 +99,6 @@ You may choose to use the webhook configuration directly as shown below.
     apiVersion: v1
     kind: Secret
     data:
-        account-name: <your_account_name>
         api-key: <your_api_key>
     metadata:
         name: simply-credentials # notice the name
